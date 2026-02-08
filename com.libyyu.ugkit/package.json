@@ -14,9 +14,9 @@
     "type": "git"
   },
   "dependencies": {
-    "com.libyyu.ugkit.tuyoogame.yooasset":"git+https://github.com/libyyu/com.libyyu.ugkit.git?path=com.libyyu.ugkit.tuyoogame.yooasset",
-    "com.libyyu.ugkit.google.protobuf":"git+https://github.com/libyyu/com.libyyu.ugkit.git?path=com.libyyu.ugkit.google.protobuf",
-    "com.cysharp.unitask": "git+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.libyyu.ugkit.tuyoogame.yooasset":"",
+    "com.libyyu.ugkit.google.protobuf":"",
+    "com.cysharp.unitask": "",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
