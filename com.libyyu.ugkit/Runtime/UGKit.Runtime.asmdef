@@ -1,9 +1,10 @@
 {
   "name": "UGKit.Runtime",
   "references": [
-      "ProtoBuffer.Runtime",
       "YooAsset",
-      "UniTask.Runtime"
+      "UniTask.Runtime"，
+      "ProtoBuffer.Runtime",
+      "XLua.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
