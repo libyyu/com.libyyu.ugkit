@@ -17,6 +17,11 @@
       "name": "com.gameframex.unity.google.protobuf",
       "expression": "",
       "define": "ENABLE_UGKIT_PROTOBUF"
+    },
+    {
+      "name": "com.libyyu.ugkit.xlua",
+      "expression": "",
+      "define": "ENABLE_UGKIT_TENCENT_XLUA"
     }
   ],
   "noEngineReferences": false
