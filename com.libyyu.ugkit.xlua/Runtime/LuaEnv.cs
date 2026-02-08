@@ -98,6 +98,17 @@ namespace XLua
                 {
                     throw new Exception("call xlua_setglobal fail!");
                 }
+                LuaAPI.lua_pushstdcallcfunction(rawL, StaticLuaCallbacks.Warning);
+                if (0 != LuaAPI.xlua_setglobal(rawL, "warn"))
+                {
+                    throw new Exception("call xlua_setglobal fail!");
+                }
+                LuaAPI.lua_pushstdcallcfunction(rawL, StaticLuaCallbacks.Error);
+                if (0 != LuaAPI.xlua_setglobal(rawL, "printError"))
+                {
+                    throw new Exception("call xlua_setglobal fail!");
+                }
+
 #endif
 
                 //template engine lib register

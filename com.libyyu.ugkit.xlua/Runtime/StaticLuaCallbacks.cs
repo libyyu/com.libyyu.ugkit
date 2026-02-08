@@ -30,6 +30,12 @@ namespace XLua
 
         internal LuaCSFunction DelegateCtor;
 
+        public delegate void LuaPrintDelegate(string s);
+        public static LuaPrintDelegate lua_Print { get; set; }
+        public static LuaPrintDelegate lua_Warning { get; set; }
+        public static LuaPrintDelegate lua_Error { get; set;  }
+
+
         public StaticLuaCallbacks()
         {
             GcMeta = new LuaCSFunction(StaticLuaCallbacks.LuaGC);
@@ -626,7 +632,10 @@ namespace XLua
 
                     LuaAPI.lua_pop(L, 1);  /* pop result */
                 }
-                UnityEngine.Debug.Log("LUA: " + s);
+                if (lua_Print != null)
+                    lua_Print(s);
+                else
+                    UnityEngine.Debug.Log("LUA: " + s);
                 return 0;
             }
             catch (System.Exception e)
@@ -634,6 +643,85 @@ namespace XLua
                 return LuaAPI.luaL_error(L, "c# exception in print:" + e);
             }
         }
+
+        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        internal static int Warning(RealStatePtr L)
+        {
+            try
+            {
+                int n = LuaAPI.lua_gettop(L);
+                string s = String.Empty;
+
+                if (0 != LuaAPI.xlua_getglobal(L, "tostring"))
+                {
+                    return LuaAPI.luaL_error(L, "can not get tostring in warn:");
+                }
+
+                for (int i = 1; i <= n; i++)
+                {
+                    LuaAPI.lua_pushvalue(L, -1);  /* function to be called */
+                    LuaAPI.lua_pushvalue(L, i);   /* value to print */
+                    if (0 != LuaAPI.lua_pcall(L, 1, 1, 0))
+                    {
+                        return LuaAPI.lua_error(L);
+                    }
+                    s += LuaAPI.lua_tostring(L, -1);
+
+                    if (i != n) s += "\t";
+
+                    LuaAPI.lua_pop(L, 1);  /* pop result */
+                }
+                if (lua_Warning != null)
+                    lua_Warning(s);
+                else
+                    UnityEngine.Debug.LogWarning("LUA: " + s);
+                return 0;
+            }
+            catch (System.Exception e)
+            {
+                return LuaAPI.luaL_error(L, "c# exception in warn:" + e);
+            }
+        }
+
+        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        internal static int Error(RealStatePtr L)
+        {
+            try
+            {
+                int n = LuaAPI.lua_gettop(L);
+                string s = String.Empty;
+
+                if (0 != LuaAPI.xlua_getglobal(L, "tostring"))
+                {
+                    return LuaAPI.luaL_error(L, "can not get tostring in printError:");
+                }
+
+                for (int i = 1; i <= n; i++)
+                {
+                    LuaAPI.lua_pushvalue(L, -1);  /* function to be called */
+                    LuaAPI.lua_pushvalue(L, i);   /* value to print */
+                    if (0 != LuaAPI.lua_pcall(L, 1, 1, 0))
+                    {
+                        return LuaAPI.lua_error(L);
+                    }
+                    s += LuaAPI.lua_tostring(L, -1);
+
+                    if (i != n) s += "\t";
+
+                    LuaAPI.lua_pop(L, 1);  /* pop result */
+                }
+                if (lua_Error != null)
+                    lua_Error(s);
+                else
+                    UnityEngine.Debug.LogError("LUA: " + s);
+                return 0;
+            }
+            catch (System.Exception e)
+            {
+                return LuaAPI.luaL_error(L, "c# exception in printError:" + e);
+            }
+        }
+
 #endif
 
 #if (!UNITY_SWITCH && !UNITY_WEBGL) || UNITY_EDITOR
