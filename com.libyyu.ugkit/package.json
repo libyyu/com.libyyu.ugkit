@@ -14,9 +14,6 @@
     "type": "git"
   },
   "dependencies": {
-    "com.libyyu.ugkit.tuyoogame.yooasset":"",
-    "com.libyyu.ugkit.google.protobuf":"",
-    "com.cysharp.unitask": "",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
