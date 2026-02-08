@@ -182,6 +182,7 @@ namespace UGKit.Web.ProtoBuff.Runtime
         /// </remarks>
         public async Task<T> Post<T>(string url, MessageObject message) where T : MessageObject, IResponseMessage
         {
+#if ENABLE_UGKIT_PROTOBUF
             var webBufferResult = await PostInner(url, message);
             if (webBufferResult.IsNotNull())
             {
@@ -200,6 +201,9 @@ namespace UGKit.Web.ProtoBuff.Runtime
             }
 
             return default;
+#else
+            return default;
+#endif
         }
 
         /// <summary>
@@ -211,6 +215,7 @@ namespace UGKit.Web.ProtoBuff.Runtime
         /// <returns>返回WebBufferResult类型的异步任务</returns>
         private Task<WebBufferResult> PostInner(string url, MessageObject message, object userData = null)
         {
+#if ENABLE_UGKIT_PROTOBUF
             var uniTaskCompletionSource = new TaskCompletionSource<WebBufferResult>();
             url = UrlHandler(url, null);
             var id = ProtoMessageIdHandler.GetReqMessageIdByType(message.GetType());
@@ -224,6 +229,9 @@ namespace UGKit.Web.ProtoBuff.Runtime
             var webData = new WebProtoBufData(url, sendData, uniTaskCompletionSource, userData);
             m_WaitingProtoBufQueue.Enqueue(webData);
             return uniTaskCompletionSource.Task;
+#else
+            return default;
+#endif
         }
     }
 }
