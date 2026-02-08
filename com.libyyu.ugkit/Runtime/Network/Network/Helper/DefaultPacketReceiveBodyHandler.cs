@@ -1,7 +1,7 @@
 #if ENABLE_UGKIT_PROTOBUF
 using ProtoBuf;
-using UGKit.Runtime;
 #endif
+using UGKit.Runtime;
 
 namespace UGKit.Network.Runtime
 {

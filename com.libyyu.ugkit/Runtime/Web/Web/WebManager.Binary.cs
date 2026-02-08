@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UGKit.Network.Runtime;
 using UGKit.Runtime;
+#if ENABLE_UGKIT_PROTOBUF
 using ProtoBuf;
+#endif
 #if UNITY_WEBGL
 using UnityEngine.Networking;
 #endif

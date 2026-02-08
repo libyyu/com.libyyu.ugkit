@@ -177,11 +177,11 @@ namespace UGKit.XLua.Runtime
             _luaEnv.StopGc();
         }
 
-        protected override void Update(float elapseSeconds, float realElapseSeconds)
+        protected internal override void Update(float elapseSeconds, float realElapseSeconds)
         {
         }
 
-        protected override void Shutdown()
+        protected internal override void Shutdown()
         {
             _luaEnv.Dispose();
         }
