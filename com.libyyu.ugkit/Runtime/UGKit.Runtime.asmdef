@@ -1,0 +1,23 @@
+{
+  "name": "UGKit.Runtime",
+  "references": [
+      "ProtoBuffer.Runtime",
+      "YooAsset",
+      "UniTask.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.gameframex.unity.google.protobuf",
+      "expression": "",
+      "define": "ENABLE_UGKIT_PROTOBUF"
+    }
+  ],
+  "noEngineReferences": false
+}
