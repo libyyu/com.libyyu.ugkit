@@ -3,6 +3,7 @@
     "rootNamespace": "UGKit.Editor",
     "references": [
         "UGKit.Runtime",
+        "XLua.Runtime",
         "WxEditor"
     ],
     "includePlatforms": [
@@ -24,6 +25,11 @@
             "name": "com.code-philosophy.hybridclr",
             "expression": "",
             "define": "ENABLE_UGKIT_HYBRID_CLR"
+        },
+        {
+            "name": "com.libyyu.ugkit.xlua",
+            "expression": "",
+            "define": "ENABLE_UGKIT_TENCENT_XLUA"
         }
     ],
     "noEngineReferences": false
