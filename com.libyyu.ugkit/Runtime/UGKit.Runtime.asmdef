@@ -2,7 +2,7 @@
   "name": "UGKit.Runtime",
   "references": [
       "YooAsset",
-      "UniTask.Runtime"，
+      "UniTask.Runtime",
       "ProtoBuffer.Runtime",
       "XLua.Runtime"
   ],
@@ -15,7 +15,7 @@
   "defineConstraints": [],
   "versionDefines": [
     {
-      "name": "com.gameframex.unity.google.protobuf",
+      "name": "com.libyyu.ugkit.google.protobuf",
       "expression": "",
       "define": "ENABLE_UGKIT_PROTOBUF"
     },
