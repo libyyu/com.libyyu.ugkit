@@ -30,7 +30,7 @@ namespace UGKit.Download.Runtime
 
         [SerializeField] private Transform m_InstanceRoot = null;
 
-        [SerializeField] private string m_DownloadAgentHelperTypeName = "UnityGameFramework.Runtime.UnityWebRequestDownloadAgentHelper";
+        [SerializeField] private string m_DownloadAgentHelperTypeName = "UGKit.Runtime.UnityWebRequestDownloadAgentHelper";
 
         [SerializeField] private DownloadAgentHelperBase m_CustomDownloadAgentHelper = null;
 

@@ -29,11 +29,11 @@ namespace UGKit.Entity.Runtime
 
         [SerializeField] private Transform m_InstanceRoot = null;
 
-        [SerializeField] private string m_EntityHelperTypeName = "UnityGameFramework.Runtime.DefaultEntityHelper";
+        [SerializeField] private string m_EntityHelperTypeName = "UGKit.Entity.Runtime.DefaultEntityHelper";
 
         [SerializeField] private EntityHelperBase m_CustomEntityHelper = null;
 
-        [SerializeField] private string m_EntityGroupHelperTypeName = "UnityGameFramework.Runtime.DefaultEntityGroupHelper";
+        [SerializeField] private string m_EntityGroupHelperTypeName = "UGKit.Entity.Runtime.DefaultEntityGroupHelper";
 
         [SerializeField] private EntityGroupHelperBase m_CustomEntityGroupHelper = null;
 
