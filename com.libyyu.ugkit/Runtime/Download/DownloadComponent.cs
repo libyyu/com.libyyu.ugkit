@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,6 +13,7 @@ namespace UGKit.Download.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Download")]
+    [UnityEngine.Scripting.Preserve]
     public sealed class DownloadComponent : GameFrameworkComponent
     {
         private const int DefaultPriority = 0;
@@ -159,6 +153,7 @@ namespace UGKit.Download.Runtime
             m_DownloadManager.Timeout = m_Timeout;
         }
 
+        [UnityEngine.Scripting.Preserve]
         private void Start()
         {
             Log.Warning($"Download Start {m_InstanceRoot}");
