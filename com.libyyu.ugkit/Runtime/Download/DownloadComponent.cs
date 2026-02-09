@@ -30,7 +30,7 @@ namespace UGKit.Download.Runtime
 
         [SerializeField] private Transform m_InstanceRoot = null;
 
-        [SerializeField] private string m_DownloadAgentHelperTypeName = "UGKit.Runtime.UnityWebRequestDownloadAgentHelper";
+        [SerializeField] private string m_DownloadAgentHelperTypeName = "UGKit.Download.Runtime.UnityWebRequestDownloadAgentHelper";
 
         [SerializeField] private DownloadAgentHelperBase m_CustomDownloadAgentHelper = null;
 
@@ -161,6 +161,7 @@ namespace UGKit.Download.Runtime
 
         private void Start()
         {
+            Log.Warning($"Download Start {m_InstanceRoot}");
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
