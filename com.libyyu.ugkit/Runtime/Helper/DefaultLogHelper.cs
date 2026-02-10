@@ -38,8 +38,8 @@ namespace UGKit.Runtime
                     break;
 
                 case GameFrameworkLogLevel.Fatal:
-                    Debug.LogError($"{time}{message}");
-                    break;
+                //    Debug.LogError($"{time}{message}");
+                 //   break;
                 default:
                     throw new GameFrameworkException($"{time}{message}");
             }

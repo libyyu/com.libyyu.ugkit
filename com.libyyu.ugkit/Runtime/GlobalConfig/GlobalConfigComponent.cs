@@ -157,10 +157,10 @@ namespace UGKit.GlobalConfig.Runtime
             m_responseGlobalInfo = globalInfo;
         }
 
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             IsAutoRegister = false;
-            base.Awake();
+            base.OnPreCreate();
         }
     }
 }

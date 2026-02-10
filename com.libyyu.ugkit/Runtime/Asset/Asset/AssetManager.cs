@@ -23,6 +23,9 @@ namespace UGKit.Asset.Runtime
         public EFileVerifyLevel VerifyLevel { get; set; }
         public long Milliseconds { get; set; }
 
+        [UnityEngine.HideInInspector]
+        public bool Initialized { get => YooAssets.Initialized; }
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -30,6 +33,11 @@ namespace UGKit.Asset.Runtime
         [UnityEngine.Scripting.Preserve]
         public void Initialize()
         {
+            if(Initialized)
+            {
+                Log.Warning("Asset Already Initialize");
+                return;
+            }
 #if ENABLE_UGKIT_BETTER_STREAMING_ASSETS
             BetterStreamingAssets.Initialize();
 #endif

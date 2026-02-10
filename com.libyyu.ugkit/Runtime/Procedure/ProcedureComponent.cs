@@ -1,7 +1,8 @@
-﻿using UGKit.Procedure;
+﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UGKit.Fsm.Runtime;
+using UGKit.Procedure;
 using UGKit.Runtime;
 using UnityEngine;
 
@@ -48,11 +49,11 @@ namespace UGKit.Procedure.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IProcedureManager);
-            base.Awake();
+            base.OnPreCreate();
             m_ProcedureManager = GameFrameworkEntry.GetModule<IProcedureManager>();
             if (m_ProcedureManager == null)
             {
@@ -61,7 +62,7 @@ namespace UGKit.Procedure.Runtime
             }
         }
 
-        private IEnumerator Start()
+        protected override async UniTask OnStart()
         {
             ProcedureBase[] procedures = new ProcedureBase[m_AvailableProcedureTypeNames.Length];
             for (int i = 0; i < m_AvailableProcedureTypeNames.Length; i++)
@@ -70,14 +71,14 @@ namespace UGKit.Procedure.Runtime
                 if (procedureType == null)
                 {
                     Log.Error("Can not find procedure type '{0}'.", m_AvailableProcedureTypeNames[i]);
-                    yield break;
+                    return;
                 }
 
                 procedures[i] = (ProcedureBase) Activator.CreateInstance(procedureType);
                 if (procedures[i] == null)
                 {
                     Log.Error("Can not create procedure instance '{0}'.", m_AvailableProcedureTypeNames[i]);
-                    yield break;
+                    return;
                 }
 
                 if (m_EntranceProcedureTypeName == m_AvailableProcedureTypeNames[i])
@@ -89,12 +90,12 @@ namespace UGKit.Procedure.Runtime
             if (m_EntranceProcedure == null)
             {
                 Log.Error("Entrance procedure is invalid.");
-                yield break;
+                return;
             }
 
             m_ProcedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
 
-            yield return new WaitForEndOfFrame();
+            await UniTask.WaitForEndOfFrame(this);
 
             m_ProcedureManager.StartProcedure(m_EntranceProcedure.GetType());
         }

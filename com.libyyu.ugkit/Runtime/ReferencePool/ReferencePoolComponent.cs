@@ -32,16 +32,11 @@ namespace UGKit.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        [UnityEngine.Scripting.Preserve]
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             IsAutoRegister = false;
-            base.Awake();
-        }
-
-        [UnityEngine.Scripting.Preserve]
-        private void Start()
-        {
+            base.OnPreCreate();
+       
             switch (m_EnableStrictCheck)
             {
                 case ReferenceStrictCheckType.AlwaysEnable:

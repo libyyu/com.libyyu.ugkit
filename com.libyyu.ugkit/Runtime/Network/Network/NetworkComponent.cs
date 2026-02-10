@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UGKit.Event.Runtime;
 using UGKit.Runtime;
 using UnityEngine;
@@ -63,11 +64,11 @@ namespace UGKit.Network.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(INetworkManager);
-            base.Awake();
+            base.OnPreCreate();
             m_NetworkManager = GameFrameworkEntry.GetModule<INetworkManager>();
             if (m_NetworkManager == null)
             {
@@ -81,7 +82,7 @@ namespace UGKit.Network.Runtime
             m_NetworkManager.NetworkError += OnNetworkError;
         }
 
-        private void Start()
+        protected override async UniTask OnStart()
         {
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)

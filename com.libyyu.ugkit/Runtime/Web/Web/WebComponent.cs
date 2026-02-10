@@ -43,11 +43,11 @@ namespace UGKit.Web.Runtime
         /// 游戏框架组件初始化。
         /// 在此方法中初始化Web管理器并设置超时时间。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IWebManager);
-            base.Awake();
+            base.OnPreCreate();
             m_WebManager = GameFrameworkEntry.GetModule<IWebManager>();
             if (m_WebManager == null)
             {

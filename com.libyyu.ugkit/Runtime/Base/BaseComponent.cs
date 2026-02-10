@@ -114,13 +114,13 @@ namespace UGKit.Runtime
         }
 
         /// <summary>
-        /// 游戏框架组件初始化。
+        /// 游戏框架组件预初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             IsAutoRegister = false;
-            base.Awake();
-
+            base.OnPreCreate();
+     
             DontDestroyOnLoad(this);
             InitTextHelper();
             InitVersionHelper();
@@ -155,10 +155,6 @@ namespace UGKit.Runtime
 #if UNITY_5_6_OR_NEWER
             Application.lowMemory += OnLowMemory;
 #endif
-        }
-
-        private void Start()
-        {
         }
 
         private void Update()

@@ -6,6 +6,7 @@ using UGKit.Asset.Runtime;
 using UGKit.Event.Runtime;
 using UGKit.Runtime;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace UGKit.Entity.Runtime
 {
@@ -58,11 +59,11 @@ namespace UGKit.Entity.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IEntityManager);
-            base.Awake();
+            base.OnPreCreate();
             m_EntityManager = GameFrameworkEntry.GetModule<IEntityManager>();
             if (m_EntityManager == null)
             {
@@ -86,7 +87,7 @@ namespace UGKit.Entity.Runtime
             m_EntityManager.HideEntityComplete += OnHideEntityComplete;
         }
 
-        private void Start()
+        protected override async UniTask OnStart()
         {
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)

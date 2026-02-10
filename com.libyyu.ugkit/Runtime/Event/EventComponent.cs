@@ -33,11 +33,11 @@ namespace UGKit.Event.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IEventManager);
-            base.Awake();
+            base.OnPreCreate();
             m_EventManager = GameFrameworkEntry.GetModule<IEventManager>();
             if (m_EventManager == null)
             {

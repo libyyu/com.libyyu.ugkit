@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace UGKit.Asset.Runtime
         private IAssetManager _assetManager;
 
         [UnityEngine.Scripting.Preserve]
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
 #if !UNITY_EDITOR
             if (GamePlayMode == EPlayMode.EditorSimulateMode)
@@ -52,7 +53,7 @@ namespace UGKit.Asset.Runtime
 #endif
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IAssetManager);
-            base.Awake();
+            base.OnPreCreate();
             _assetManager = GameFrameworkEntry.GetModule<IAssetManager>();
             if (_assetManager == null)
             {
@@ -63,10 +64,13 @@ namespace UGKit.Asset.Runtime
             _assetManager.SetPlayMode(GamePlayMode);
         }
 
-        [UnityEngine.Scripting.Preserve]
-        private void Start()
+        protected override async UniTask OnStart()
         {
             _assetManager.Initialize();
+            while (!_assetManager.Initialized)
+            {
+                 await UniTask.Yield();
+            }
         }
 
         /// <summary>

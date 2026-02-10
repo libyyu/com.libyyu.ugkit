@@ -60,11 +60,11 @@ namespace UGKit.Sound.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(ISoundManager);
-            base.Awake();
+            base.OnPreCreate();
             m_SoundManager = GameFrameworkEntry.GetModule<ISoundManager>();
             if (m_SoundManager == null)
             {
@@ -100,7 +100,7 @@ namespace UGKit.Sound.Runtime
 #endif
         }
 
-        private void Start()
+        protected override async UniTask OnStart()
         {
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
@@ -150,7 +150,7 @@ namespace UGKit.Sound.Runtime
             }
         }
 
-        private void OnDestroy()
+        protected override async UniTask OnRelease()
         {
 #if UNITY_5_4_OR_NEWER
             SceneManager.sceneLoaded -= OnSceneLoaded;

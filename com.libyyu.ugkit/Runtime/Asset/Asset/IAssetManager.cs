@@ -74,6 +74,9 @@ namespace UGKit.Asset.Runtime
         [UnityEngine.Scripting.Preserve]
         long Milliseconds { get; set; }
 
+        [UnityEngine.Scripting.Preserve]
+        bool Initialized { get; }
+
         /// <summary>
         /// 设置运行模式
         /// </summary>

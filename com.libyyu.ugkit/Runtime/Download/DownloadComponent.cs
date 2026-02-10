@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UGKit.Runtime;
 using UGKit.Event.Runtime;
+using UGKit.Runtime;
 using UnityEngine;
 
 namespace UGKit.Download.Runtime
@@ -133,11 +134,11 @@ namespace UGKit.Download.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IDownloadManager);
-            base.Awake();
+            base.OnPreCreate();
             m_DownloadManager = GameFrameworkEntry.GetModule<IDownloadManager>();
             if (m_DownloadManager == null)
             {
@@ -151,18 +152,6 @@ namespace UGKit.Download.Runtime
             m_DownloadManager.DownloadFailure += OnDownloadFailure;
             m_DownloadManager.FlushSize = m_FlushSize;
             m_DownloadManager.Timeout = m_Timeout;
-        }
-
-        [UnityEngine.Scripting.Preserve]
-        private void Start()
-        {
-            Log.Warning($"Download Start {m_InstanceRoot}");
-            m_EventComponent = GameEntry.GetComponent<EventComponent>();
-            if (m_EventComponent == null)
-            {
-                Log.Fatal("Event component is invalid.");
-                return;
-            }
 
             if (m_InstanceRoot == null)
             {
@@ -175,6 +164,31 @@ namespace UGKit.Download.Runtime
             {
                 AddDownloadAgentHelper(i);
             }
+        }
+
+        protected override async UniTask OnCreate()
+        {
+            float startTime = Time.realtimeSinceStartup;
+            do
+            {
+                m_EventComponent = GameEntry.GetComponent<EventComponent>();
+                if (m_EventComponent == null)
+                {
+                    await UniTask.Delay(100);
+                }
+            } while (Time.realtimeSinceStartup < startTime + 3);
+
+            m_EventComponent = GameEntry.GetComponent<EventComponent>();
+            if (m_EventComponent == null)
+            {
+                Log.Fatal("Event component is invalid.");
+                return;
+            }
+        }
+
+        protected override async UniTask OnStart()
+        {
+            Log.Info("Download Start");
         }
 
         /// <summary>

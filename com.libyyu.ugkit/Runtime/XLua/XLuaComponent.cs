@@ -18,11 +18,11 @@ namespace UGKit.XLua.Runtime
 #if ENABLE_UGKIT_TENCENT_XLUA
         private IXLuaManager _luaManager;
 
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IXLuaManager);
-            base.Awake();
+            base.OnPreCreate();
             _luaManager = GameFrameworkEntry.GetModule<IXLuaManager>();
             if (_luaManager == null)
             {
@@ -31,6 +31,7 @@ namespace UGKit.XLua.Runtime
             }
 
             _luaManager.InitLuaEnv(new LuaEnv());
+            Log.Info("XLua In Runing");
         }
 
         /// <summary>
@@ -185,6 +186,11 @@ namespace UGKit.XLua.Runtime
         {
             _luaManager.StopGc();
         }
+#else
+    protected override void Awake()
+    {
+        Log.Fatal("ENABLE_UGKIT_TENCENT_XLUA not opened.");
+    }
 #endif
     }
 }

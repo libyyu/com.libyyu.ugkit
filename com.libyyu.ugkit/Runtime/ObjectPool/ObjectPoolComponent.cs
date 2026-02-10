@@ -27,11 +27,11 @@ namespace UGKit.Runtime
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Type.GetType(componentType);
             InterfaceComponentType = typeof(IObjectPoolManager);
-            base.Awake();
+            base.OnPreCreate();
             m_ObjectPoolManager = GameFrameworkEntry.GetModule<IObjectPoolManager>();
             if (m_ObjectPoolManager == null)
             {

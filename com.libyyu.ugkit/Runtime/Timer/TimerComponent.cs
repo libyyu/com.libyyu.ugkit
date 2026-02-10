@@ -14,11 +14,11 @@ namespace UGKit.Timer.Runtime
     {
         ITimerManager _timerManager;
 
-        protected override void Awake()
+        protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(ITimerManager);
-            base.Awake();
+            base.OnPreCreate();
             _timerManager = GameFrameworkEntry.GetModule<ITimerManager>();
             if (_timerManager == null)
             {
