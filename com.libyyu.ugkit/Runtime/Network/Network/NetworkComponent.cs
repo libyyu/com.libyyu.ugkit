@@ -84,6 +84,7 @@ namespace UGKit.Network.Runtime
 
         protected override async UniTask OnStart()
         {
+            await UniTask.CompletedTask;
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {

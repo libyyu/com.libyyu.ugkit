@@ -102,6 +102,7 @@ namespace UGKit.Sound.Runtime
 
         protected override async UniTask OnStart()
         {
+            await UniTask.CompletedTask;
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
@@ -152,6 +153,7 @@ namespace UGKit.Sound.Runtime
 
         protected override async UniTask OnRelease()
         {
+            await UniTask.CompletedTask;
 #if UNITY_5_4_OR_NEWER
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;

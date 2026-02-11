@@ -86,9 +86,9 @@ namespace UGKit.Runtime
             }
         }
 
-        protected virtual async UniTask OnCreate() { }
-        protected virtual async UniTask OnStart() { }
-        protected virtual async UniTask OnRelease() { }
+        protected virtual async UniTask OnCreate() { await UniTask.CompletedTask;  }
+        protected virtual async UniTask OnStart() { await UniTask.CompletedTask; }
+        protected virtual async UniTask OnRelease() { await UniTask.CompletedTask; }
 
         public async UniTask RunCoroutineAsync(IEnumerator coroutine)
         {

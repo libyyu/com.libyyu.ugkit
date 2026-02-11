@@ -89,6 +89,7 @@ namespace UGKit.Entity.Runtime
 
         protected override async UniTask OnStart()
         {
+            await UniTask.CompletedTask;
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {

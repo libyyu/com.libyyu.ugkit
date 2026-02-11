@@ -174,7 +174,7 @@ namespace UGKit.Download.Runtime
                 m_EventComponent = GameEntry.GetComponent<EventComponent>();
                 if (m_EventComponent == null)
                 {
-                    await UniTask.Delay(100);
+                    await UniTask.Yield();
                 }
             } while (Time.realtimeSinceStartup < startTime + 3);
 
@@ -188,6 +188,7 @@ namespace UGKit.Download.Runtime
 
         protected override async UniTask OnStart()
         {
+            await UniTask.CompletedTask;
             Log.Info("Download Start");
         }
 
