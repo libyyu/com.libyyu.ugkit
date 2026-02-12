@@ -242,7 +242,7 @@ namespace UGKit.XLua.Runtime
             _luaManager.StopGc();
         }
 #else
-    protected override void Awake()
+    protected override void OnPreCreate()
     {
         Log.Fatal("ENABLE_UGKIT_TENCENT_XLUA not opened.");
     }
