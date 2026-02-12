@@ -120,6 +120,7 @@ namespace UGKit.Runtime
             if (!s_ModuleTypeMap.TryGetValue(interfaceType, out _))
             {
                 s_ModuleTypeMap[interfaceType] = implType;
+                Log.Info($"Register Module: {interfaceType} {implType}");
             }
         }
 
