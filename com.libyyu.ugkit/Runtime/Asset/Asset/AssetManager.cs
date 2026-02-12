@@ -14,7 +14,7 @@ namespace UGKit.Asset.Runtime
     public partial class AssetManager : GameFrameworkModule, IAssetManager
     {
         public string DefaultPackageName { get; set; } = "DefaultPackage";
-
+        public ResourcePackage DefaultResourcePackage { get; private set; }
 
         public int DownloadingMaxNum { get; set; }
         public int FailedTryAgain { get; set; }
@@ -75,7 +75,7 @@ namespace UGKit.Asset.Runtime
                 if (isDefaultPackage)
                 {
                     // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
-                    YooAssets.SetDefaultPackage(resourcePackage);
+                    SetDefaultAssetsPackage(resourcePackage);
                 }
             }
 
@@ -730,6 +730,12 @@ namespace UGKit.Asset.Runtime
         public void SetDefaultAssetsPackage(ResourcePackage resourcePackage)
         {
             YooAssets.SetDefaultPackage(resourcePackage);
+            DefaultResourcePackage = resourcePackage;
+        }
+
+        public ResourcePackage GetDefaultAssetsPackage()
+        {
+            return DefaultResourcePackage;
         }
 
 

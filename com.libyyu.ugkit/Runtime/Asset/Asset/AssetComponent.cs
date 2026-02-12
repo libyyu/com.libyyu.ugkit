@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UGKit.Runtime;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
@@ -604,6 +603,12 @@ namespace UGKit.Asset.Runtime
         public void SetDefaultAssetsPackage(ResourcePackage assetsPackage)
         {
             _assetManager.SetDefaultAssetsPackage(assetsPackage);
+        }
+
+        [UnityEngine.Scripting.Preserve]
+        public ResourcePackage GetDefaultAssetsPackage()
+        {             
+            return _assetManager.GetDefaultAssetsPackage();
         }
 
         /// <summary>

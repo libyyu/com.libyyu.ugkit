@@ -1,5 +1,10 @@
 ﻿using UGKit.Runtime;
 using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+
+
+
 #if ENABLE_UGKIT_TENCENT_XLUA
 using System;
 using XLua;
@@ -18,6 +23,15 @@ namespace UGKit.XLua.Runtime
 #if ENABLE_UGKIT_TENCENT_XLUA
         private IXLuaManager _luaManager;
 
+        [Serializable]
+        public struct LuaLoader
+        {
+            public string PackageName;
+            public string Prefix;
+        }
+
+        [SerializeField] public List<LuaLoader> m_LuaPackageList = new List<LuaLoader>();
+
         protected override void OnPreCreate()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
@@ -31,8 +45,49 @@ namespace UGKit.XLua.Runtime
             }
 
             _luaManager.InitLuaEnv(new LuaEnv());
+            _luaManager.AddLoader(CustomLoader);
             Log.Info("XLua In Runing");
+
+            if (m_LuaPackageList.Count == 0)
+            {
+                var defaultPackage = GameApp.Asset.GetDefaultAssetsPackage();
+                m_LuaPackageList.Insert(0, new LuaLoader
+                {
+                    PackageName = defaultPackage.PackageName,
+                    Prefix = "Assets/LuaScript"
+                });
+            }
         }
+
+        byte[] CustomLoader(ref string filepath)
+        {
+            var defaultPackage = GameApp.Asset.GetDefaultAssetsPackage();
+            for (int i = m_LuaPackageList.Count - 1; i >= 0; --i)
+            {
+                try
+                {
+                    var package = GameApp.Asset.GetAssetsPackage(m_LuaPackageList[i].PackageName);
+                    GameApp.Asset.SetDefaultAssetsPackage(package);
+                    var path = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua");
+                    var handle = GameApp.Asset.LoadAssetSync<TextAsset>(path);
+                    if (null != handle)
+                    {
+                        var textAsset = handle.AssetObject as TextAsset;
+                        return textAsset.bytes;
+                    }
+                }
+                finally
+                {
+                    if (defaultPackage != null)
+                    {
+                        GameApp.Asset.SetDefaultAssetsPackage(defaultPackage);
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         /// <summary>
         /// 执行Lua代码字符串

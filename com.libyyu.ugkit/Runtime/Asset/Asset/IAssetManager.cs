@@ -483,6 +483,8 @@ namespace UGKit.Asset.Runtime
         [UnityEngine.Scripting.Preserve]
         void SetDefaultAssetsPackage(ResourcePackage resourcePackage);
 
+        ResourcePackage GetDefaultAssetsPackage();
+
         /// <summary>
         /// 清理无用资源
         /// </summary>
