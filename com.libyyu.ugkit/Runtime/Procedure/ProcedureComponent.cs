@@ -13,6 +13,8 @@ namespace UGKit.Procedure.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Procedure")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.PROCEDURE_MANAGER)]
     public sealed class ProcedureComponent : GameFrameworkComponent
     {
         private IProcedureManager m_ProcedureManager = null;
@@ -45,6 +47,8 @@ namespace UGKit.Procedure.Runtime
         {
             get { return m_ProcedureManager.CurrentProcedureTime; }
         }
+
+        [HideInInspector] public bool IsRunning { get; private set; }
 
         /// <summary>
         /// 游戏框架组件初始化。
@@ -97,6 +101,7 @@ namespace UGKit.Procedure.Runtime
 
             await UniTask.WaitForEndOfFrame(this);
 
+            IsRunning = true;
             m_ProcedureManager.StartProcedure(m_EntranceProcedure.GetType());
         }
 

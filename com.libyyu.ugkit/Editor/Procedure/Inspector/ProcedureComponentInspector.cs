@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using UGKit.Editor;
@@ -36,7 +30,7 @@ namespace UGKit.Procedure.Editor
             {
                 EditorGUILayout.HelpBox("Entrance procedure is invalid.", MessageType.Error);
             }
-            else if (EditorApplication.isPlaying)
+            else if (EditorApplication.isPlaying && t.IsRunning)
             {
                 EditorGUILayout.LabelField("Current Procedure", t.CurrentProcedure == null ? "None" : t.CurrentProcedure.GetType().ToString());
             }

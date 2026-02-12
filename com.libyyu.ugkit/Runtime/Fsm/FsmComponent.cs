@@ -12,6 +12,8 @@ namespace UGKit.Fsm.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/FSM")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.FSM_MANAGER)]
     public sealed class FsmComponent : GameFrameworkComponent
     {
         private IFsmManager m_FsmManager = null;

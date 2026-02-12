@@ -10,6 +10,7 @@ namespace UGKit.Timer.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Timer")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.TIME_MANAGER)]
     public class TimerComponent : GameFrameworkComponent
     {
         ITimerManager _timerManager;

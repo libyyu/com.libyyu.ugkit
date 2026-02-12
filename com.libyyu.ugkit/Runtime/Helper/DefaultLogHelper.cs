@@ -22,27 +22,48 @@ namespace UGKit.Runtime
             switch (level)
             {
                 case GameFrameworkLogLevel.Debug:
-                    Debug.Log($"{time}{message}");
+                    Debug.Log(ColorizeLogMessage(level, $"{time}{message}"));
                     break;
 
                 case GameFrameworkLogLevel.Info:
-                    Debug.Log($"{time}{message}");
+                    Debug.Log(ColorizeLogMessage(level, $"{time}{message}"));
                     break;
 
                 case GameFrameworkLogLevel.Warning:
-                    Debug.LogWarning($"{time}{message}");
+                    Debug.LogWarning(ColorizeLogMessage(level, $"{time}{message}"));
                     break;
 
                 case GameFrameworkLogLevel.Error:
-                    Debug.LogError($"{time}{message}");
+                    Debug.LogError(ColorizeLogMessage(level, $"{time}{message}"));
                     break;
 
                 case GameFrameworkLogLevel.Fatal:
-                //    Debug.LogError($"{time}{message}");
-                 //   break;
                 default:
                     throw new GameFrameworkException($"{time}{message}");
             }
+        }
+
+        static object ColorizeLogMessage(GameFrameworkLogLevel logLevel, object message)
+        {
+#if UNITY_EDITOR
+            switch (logLevel)
+            {
+                case GameFrameworkLogLevel.Debug:
+                    return $"<color=#00ffd8><b>[DEBUG] ► </b></color><color=#72ffe9>{message}</color>";
+                case GameFrameworkLogLevel.Info:
+                    return $"<color=#00ff73><b>[INFO] ► </b></color><color=#72ffb2>{message}</color>";
+                case GameFrameworkLogLevel.Warning:
+                    return $"<color=#ffc400><b>[WARNING] ► </b></color><color=#ffdf71>{message}</color>";
+                case GameFrameworkLogLevel.Error:
+                    return $"<color=#ff003c><b>[ERROR] ► </b></color><color=#ff7293>{message}</color>";
+                case GameFrameworkLogLevel.Fatal:
+                    return $"<color=#ff003c><b>[FATAL] ► </b></color><color=#ff7293>{message}</color>";
+            }
+
+            return message;
+#else
+            return message;
+#endif
         }
     }
 }

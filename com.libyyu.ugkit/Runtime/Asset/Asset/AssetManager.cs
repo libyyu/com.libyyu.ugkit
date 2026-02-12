@@ -31,7 +31,7 @@ namespace UGKit.Asset.Runtime
         /// </summary>
         /// <returns></returns>
         [UnityEngine.Scripting.Preserve]
-        public void Initialize()
+        public void Initialize(YooAsset.ILogger logger = null)
         {
             if(Initialized)
             {
@@ -42,7 +42,7 @@ namespace UGKit.Asset.Runtime
             BetterStreamingAssets.Initialize();
 #endif
             Log.Info($"资源系统运行模式：{PlayMode}");
-            YooAssets.Initialize();
+            YooAssets.Initialize(logger);
             YooAssets.SetOperationSystemMaxTimeSlice(30);
             // YooAssets.SetCacheSystemCachedFileVerifyLevel(EVerifyLevel.High);
             // YooAssets.SetDownloadSystemBreakpointResumeFileSize(4096 * 8);

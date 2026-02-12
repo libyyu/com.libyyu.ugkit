@@ -15,6 +15,7 @@ namespace UGKit.Web.ProtoBuff.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Web ProtoBuff")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.WEBPROTOBUF_MANAGER)]
     public sealed class WebProtoBuffComponent : GameFrameworkComponent
     {
         /// <summary>

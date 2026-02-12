@@ -16,6 +16,7 @@ namespace UGKit.Web.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Web")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.WEBNETWORK_MANAGER)]
     public sealed class WebComponent : GameFrameworkComponent
     {
         /// <summary>

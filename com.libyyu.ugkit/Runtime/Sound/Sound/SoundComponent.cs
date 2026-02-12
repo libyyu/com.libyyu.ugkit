@@ -15,6 +15,8 @@ namespace UGKit.Sound.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Sound")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.AUDIO_MANAGER)]
     public sealed partial class SoundComponent : GameFrameworkComponent
     {
         private const int DefaultPriority = 0;
@@ -100,7 +102,7 @@ namespace UGKit.Sound.Runtime
 #endif
         }
 
-        protected override async UniTask OnStart()
+        protected override async UniTask OnCreate()
         {
             await UniTask.CompletedTask;
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
@@ -116,8 +118,14 @@ namespace UGKit.Sound.Runtime
                 Log.Fatal("Event component is invalid.");
                 return;
             }
+            var assetManager = GameFrameworkEntry.GetModule<AssetManager>();
+            if (assetManager == null)
+            {
+                Log.Fatal("Asset component is invalid.");
+                return;
+            }
 
-            m_SoundManager.SetResourceManager(GameFrameworkEntry.GetModule<IAssetManager>());
+            m_SoundManager.SetResourceManager(assetManager);
 
             SoundHelperBase soundHelper = Helper.CreateHelper(m_SoundHelperTypeName, m_CustomSoundHelper);
             if (soundHelper == null)

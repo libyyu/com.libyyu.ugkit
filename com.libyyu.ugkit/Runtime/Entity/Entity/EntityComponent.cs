@@ -15,6 +15,8 @@ namespace UGKit.Entity.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Entity")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.ENTITY_MANAGER)]
     public sealed partial class EntityComponent : GameFrameworkComponent
     {
         private const int DefaultPriority = 0;
@@ -87,7 +89,7 @@ namespace UGKit.Entity.Runtime
             m_EntityManager.HideEntityComplete += OnHideEntityComplete;
         }
 
-        protected override async UniTask OnStart()
+        protected override async UniTask OnCreate()
         {
             await UniTask.CompletedTask;
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();

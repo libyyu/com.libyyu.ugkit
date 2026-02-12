@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UGKit.Runtime;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
@@ -10,12 +11,33 @@ using Object = UnityEngine.Object;
 
 namespace UGKit.Asset.Runtime
 {
+    internal class YooAssetsLogger : YooAsset.ILogger
+    {
+        public void Log(string message)
+        {
+            UGKit.Runtime.Log.Info($"[YooAsset] {message}");
+        }
+        public void Warning(string message)
+        {
+            UGKit.Runtime.Log.Warning($"[YooAsset] {message}");
+        }
+        public void Error(string message)
+        {
+            UGKit.Runtime.Log.Error($"[YooAsset] {message}");
+        }
+        public void Exception(Exception exception)
+        {
+            UGKit.Runtime.Log.Fatal($"[YooAsset] {exception}");
+        }
+    }
+
     /// <summary>
     /// 资源组件。
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Asset")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.ASSET_MANAGER)]
     public sealed class AssetComponent : GameFrameworkComponent
     {
         [Tooltip("当目标平台为Web平台时，将会强制设置为" + nameof(EPlayMode.WebPlayMode))] [SerializeField]
@@ -62,15 +84,12 @@ namespace UGKit.Asset.Runtime
             }
 
             _assetManager.SetPlayMode(GamePlayMode);
+            _assetManager.Initialize(new YooAssetsLogger());
         }
 
         protected override async UniTask OnStart()
         {
-            _assetManager.Initialize();
-            while (!_assetManager.Initialized)
-            {
-                 await UniTask.Yield();
-            }
+            await UniTask.CompletedTask;
         }
 
         /// <summary>

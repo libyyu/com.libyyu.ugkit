@@ -10,6 +10,8 @@ namespace UGKit.Config.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Config")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.SETTINGS_LOCAL)]
     public sealed class ConfigComponent : GameFrameworkComponent
     {
         private IConfigManager m_ConfigManager = null;

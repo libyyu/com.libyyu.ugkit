@@ -89,7 +89,7 @@ namespace UGKit.Asset.Runtime
         /// </summary>
         /// <returns></returns>
         [UnityEngine.Scripting.Preserve]
-        void Initialize();
+        void Initialize(YooAsset.ILogger logger = null);
 
         /// <summary>
         /// 异步初始化操作

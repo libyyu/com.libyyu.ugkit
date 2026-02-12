@@ -12,6 +12,7 @@ namespace UGKit.Network.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Network")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.NETWORK_MANAGER)]
     public sealed class NetworkComponent : GameFrameworkComponent
     {
         private INetworkManager m_NetworkManager = null;

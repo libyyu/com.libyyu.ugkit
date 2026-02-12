@@ -15,6 +15,7 @@ namespace UGKit.Download.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Download")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.DOWNLOAD_MANAGER)]
     public sealed class DownloadComponent : GameFrameworkComponent
     {
         private const int DefaultPriority = 0;
@@ -168,28 +169,13 @@ namespace UGKit.Download.Runtime
 
         protected override async UniTask OnCreate()
         {
-            float startTime = Time.realtimeSinceStartup;
-            do
-            {
-                m_EventComponent = GameEntry.GetComponent<EventComponent>();
-                if (m_EventComponent == null)
-                {
-                    await UniTask.Yield();
-                }
-            } while (Time.realtimeSinceStartup < startTime + 3);
-
+            await UniTask.CompletedTask;
             m_EventComponent = GameEntry.GetComponent<EventComponent>();
             if (m_EventComponent == null)
             {
                 Log.Fatal("Event component is invalid.");
                 return;
             }
-        }
-
-        protected override async UniTask OnStart()
-        {
-            await UniTask.CompletedTask;
-            Log.Info("Download Start");
         }
 
         /// <summary>

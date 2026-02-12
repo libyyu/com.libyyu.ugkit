@@ -10,6 +10,8 @@ namespace UGKit.GlobalConfig.Runtime
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Global Config")]
+    [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.SETTINGS_GLOBAL)]
     public sealed class GlobalConfigComponent : GameFrameworkComponent
     {
         /// <summary>

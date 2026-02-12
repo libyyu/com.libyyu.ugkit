@@ -11,6 +11,7 @@ namespace UGKit.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Object Pool")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.POOL_MANAGER)]
     public sealed class ObjectPoolComponent : GameFrameworkComponent
     {
         private IObjectPoolManager m_ObjectPoolManager = null;

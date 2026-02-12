@@ -10,6 +10,7 @@ namespace UGKit.Event.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Event")]
     [UnityEngine.Scripting.Preserve]
+    [DefaultExecutionOrder(ExecutionOrders.EVENT_MANAGER)]
     public sealed class EventComponent : GameFrameworkComponent
     {
         private IEventManager m_EventManager = null;

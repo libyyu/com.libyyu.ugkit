@@ -10,7 +10,7 @@ namespace UGKit.Runtime
     [DisallowMultipleComponent]
     [AddComponentMenu("UGKit/Framework/Base")]
     [UnityEngine.Scripting.Preserve]
-    [DefaultExecutionOrder(-500)]
+    [DefaultExecutionOrder(ExecutionOrders.BOOTSTRAP)]
     public sealed class BaseComponent : GameFrameworkComponent
     {
         private const int DefaultDpi = 96; // default windows dpi

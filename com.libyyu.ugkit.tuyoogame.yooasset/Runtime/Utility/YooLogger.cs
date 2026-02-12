@@ -26,7 +26,7 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Log(GetTime() + info);
+                Logger.Log(info);
             }
             else
             {
