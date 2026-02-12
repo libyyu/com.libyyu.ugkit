@@ -1,0 +1,82 @@
+﻿
+using UGKit.Editor;
+using UGKit.UI.Runtime;
+using UnityEditor;
+
+namespace UGKit.UI.Editor
+{
+    /// <summary>
+    /// UI 表单检查器。
+    /// </summary>
+    [CustomEditor(typeof(UIForm), true)]
+    internal sealed class UIFormInspector : GameFrameworkInspector
+    {
+        private SerializedProperty m_Available = null;
+        private SerializedProperty m_Visible = null;
+        private SerializedProperty m_IsInit = null;
+        private SerializedProperty m_IsDisableRecycling = null;
+        private SerializedProperty m_IsDisableClosing = null;
+        private SerializedProperty m_SerialId = null;
+        private SerializedProperty m_OriginalLayer = null;
+        private SerializedProperty m_UIFormAssetName = null;
+        private SerializedProperty m_AssetPath = null;
+        private SerializedProperty m_DepthInUIGroup = null;
+        private SerializedProperty m_PauseCoveredUIForm = null;
+        private SerializedProperty m_FullName = null;
+        private SerializedProperty m_EnableShowAnimation = null;
+        private SerializedProperty m_ShowAnimationName = null;
+        private SerializedProperty m_EnableHideAnimation = null;
+        private SerializedProperty m_HideAnimationName = null;
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            serializedObject.Update();
+
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            {
+                EditorGUILayout.PropertyField(m_FullName);
+                EditorGUILayout.PropertyField(m_SerialId);
+                EditorGUILayout.PropertyField(m_IsInit);
+                EditorGUILayout.PropertyField(m_IsDisableRecycling);
+                EditorGUILayout.PropertyField(m_IsDisableClosing);
+                EditorGUILayout.PropertyField(m_OriginalLayer);
+                EditorGUILayout.PropertyField(m_UIFormAssetName);
+                EditorGUILayout.PropertyField(m_Available);
+                EditorGUILayout.PropertyField(m_Visible);
+                EditorGUILayout.PropertyField(m_AssetPath);
+                EditorGUILayout.PropertyField(m_DepthInUIGroup);
+                EditorGUILayout.PropertyField(m_PauseCoveredUIForm);
+                EditorGUILayout.PropertyField(m_EnableShowAnimation);
+                EditorGUILayout.PropertyField(m_ShowAnimationName);
+                EditorGUILayout.PropertyField(m_EnableHideAnimation);
+                EditorGUILayout.PropertyField(m_HideAnimationName);
+            }
+            EditorGUI.EndDisabledGroup();
+
+            Repaint();
+        }
+
+
+        private void OnEnable()
+        {
+            m_Available = serializedObject.FindProperty("m_Available");
+            m_Visible = serializedObject.FindProperty("m_Visible");
+            m_IsInit = serializedObject.FindProperty("m_IsInit");
+            m_IsDisableRecycling = serializedObject.FindProperty("m_IsDisableRecycling");
+            m_IsDisableClosing = serializedObject.FindProperty("m_IsDisableClosing");
+            m_SerialId = serializedObject.FindProperty("m_SerialId");
+            m_OriginalLayer = serializedObject.FindProperty("m_OriginalLayer");
+            m_UIFormAssetName = serializedObject.FindProperty("m_UIFormAssetName");
+            m_AssetPath = serializedObject.FindProperty("m_AssetPath");
+            m_DepthInUIGroup = serializedObject.FindProperty("m_DepthInUIGroup");
+            m_PauseCoveredUIForm = serializedObject.FindProperty("m_PauseCoveredUIForm");
+            m_FullName = serializedObject.FindProperty("m_FullName");
+            m_EnableShowAnimation = serializedObject.FindProperty("m_EnableShowAnimation");
+            m_ShowAnimationName = serializedObject.FindProperty("m_ShowAnimationName");
+            m_EnableHideAnimation = serializedObject.FindProperty("m_EnableHideAnimation");
+            m_HideAnimationName = serializedObject.FindProperty("m_HideAnimationName");
+        }
+    }
+}
