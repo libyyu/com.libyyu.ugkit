@@ -80,7 +80,7 @@ namespace UGKit.Runtime
         [UnityEngine.Scripting.Preserve]
         public static GameObject FindChildGamObjectByName(string nodeName, string sceneName = null)
         {
-            Scene scene;
+            UnityEngine.SceneManagement.Scene scene;
             if (sceneName.IsNullOrWhiteSpace())
             {
                 scene = SceneManager.GetActiveScene();

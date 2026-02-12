@@ -83,7 +83,7 @@ namespace UGKit.Network.Runtime
             m_NetworkManager.NetworkError += OnNetworkError;
         }
 
-        protected override async UniTask OnStart()
+        protected override async UniTask OnCreate()
         {
             await UniTask.CompletedTask;
             m_EventComponent = GameEntry.GetComponent<EventComponent>();

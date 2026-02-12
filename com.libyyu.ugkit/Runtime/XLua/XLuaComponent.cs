@@ -24,10 +24,45 @@ namespace UGKit.XLua.Runtime
         private IXLuaManager _luaManager;
 
         [Serializable]
-        public struct LuaLoader
+        public struct LuaLoader : IEquatable<LuaLoader>
         {
             public string PackageName;
             public string Prefix;
+
+            // 实现 IEquatable<Point>
+            public bool Equals(LuaLoader other)
+            {
+                return PackageName == other.PackageName && Prefix == other.Prefix;
+            }
+
+            // 重写 Object.Equals
+            public override bool Equals(object obj)
+            {
+                return obj is LuaLoader other && Equals(other);
+            }
+
+            // 重写 GetHashCode
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(PackageName, Prefix);
+            }
+
+            // 重载运算符
+            public static bool operator ==(LuaLoader left, LuaLoader right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(LuaLoader left, LuaLoader right)
+            {
+                return !left.Equals(right);
+            }
+
+            // 方便调试
+            public override string ToString()
+            {
+                return $"{PackageName}|{Prefix}";
+            }
         }
 
         [SerializeField] public List<LuaLoader> m_LuaPackageList = new List<LuaLoader>();

@@ -26,10 +26,10 @@ namespace UGKit.Runtime
         public const int WEBPROTOBUF_MANAGER = -2880;   // Web Protobuf系统
         public const int DOWNLOAD_MANAGER   = -2850;    // 下载系统
         public const int ASSET_MANAGER      = -2800;    // 资源系统
-        public const int ENTITY_MANAGER     = -2750;    // 实体系统
-        public const int AUDIO_MANAGER      = -2700;    // 音频系统
+        public const int SCENE_MANAGER      = -2750;    // 场景系统
+        public const int ENTITY_MANAGER     = -2700;    // 实体系统
+        public const int AUDIO_MANAGER      = -2650;    // 音频系统
         public const int INPUT_MANAGER      = -2600;    // 输入系统
-        public const int SCENE_MANAGER      = -2500;    // 场景加载管理器
         public const int UI_MANAGER         = -1500;    // UI框架根节点
         public const int LOCALIZATION       = -1000;    // 本地化系统
 

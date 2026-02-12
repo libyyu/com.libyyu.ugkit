@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UGKit.Asset.Runtime;
 using UGKit.Event.Runtime;
 using UGKit.Runtime;
+using UGKit.Scene.Runtime;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -88,17 +89,17 @@ namespace UGKit.Sound.Runtime
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
 #else
-            //ISceneManager sceneManager = GameFrameworkEntry.GetModule<ISceneManager>();
-            //if (sceneManager == null)
-            //{
-            //    Log.Fatal("Scene manager is invalid.");
-            //    return;
-            //}
+            ISceneManager sceneManager = GameFrameworkEntry.GetModule<ISceneManager>();
+            if (sceneManager == null)
+            {
+                Log.Fatal("Scene manager is invalid.");
+                return;
+            }
 
-            //sceneManager.LoadSceneSuccess += OnLoadSceneSuccess;
-            //sceneManager.LoadSceneFailure += OnLoadSceneFailure;
-            //sceneManager.UnloadSceneSuccess += OnUnloadSceneSuccess;
-            //sceneManager.UnloadSceneFailure += OnUnloadSceneFailure;
+            sceneManager.LoadSceneSuccess += OnLoadSceneSuccess;
+            sceneManager.LoadSceneFailure += OnLoadSceneFailure;
+            sceneManager.UnloadSceneSuccess += OnUnloadSceneSuccess;
+            sceneManager.UnloadSceneFailure += OnUnloadSceneFailure;
 #endif
         }
 
@@ -668,7 +669,7 @@ namespace UGKit.Sound.Runtime
         {
             m_EventComponent.Fire(this, eventArgs);
         }
-#if false
+
         private void OnLoadSceneSuccess(object sender, LoadSceneSuccessEventArgs e)
         {
             RefreshAudioListener();
@@ -688,7 +689,7 @@ namespace UGKit.Sound.Runtime
         {
             RefreshAudioListener();
         }
-#endif
+
         private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode loadSceneMode)
         {
             RefreshAudioListener();
