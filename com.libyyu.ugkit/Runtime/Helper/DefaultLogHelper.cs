@@ -45,7 +45,7 @@ namespace UGKit.Runtime
 
         static object ColorizeLogMessage(GameFrameworkLogLevel logLevel, object message)
         {
-#if UNITY_EDITOR
+#if false && UNITY_EDITOR
             switch (logLevel)
             {
                 case GameFrameworkLogLevel.Debug:

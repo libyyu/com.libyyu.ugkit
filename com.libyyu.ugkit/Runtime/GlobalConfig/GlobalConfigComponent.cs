@@ -80,6 +80,13 @@ namespace UGKit.GlobalConfig.Runtime
             }
         }
 
+        [SerializeField] private GameFrameworkLogLevel m_logLevel = GameFrameworkLogLevel.Info;
+        public GameFrameworkLogLevel LogLevel
+        {
+            get { return m_logLevel; }
+            set { m_logLevel = value; }
+        }
+
         /// <summary>
         /// 附加内容
         /// </summary>
