@@ -298,6 +298,22 @@ function NeedUpdate(t)
     return t.IsValueType and not t.IsPrimitive and not t.IsEnum and t ~= typeof(CS.System.Decimal)
 end
 
+function IsParameterIn(full_name, parameter)
+    if full_name == "UnityEngine.Application.MemoryUsageChangedCallback" and CsFullTypeName(parameter.ParameterType) == "UnityEngine.ApplicationMemoryUsageChange" then
+        return true
+    end
+    return false
+end
+
+function IsParameterRef(full_name, parameter)
+    if full_name == "UnityEngine.Application.MemoryUsageChangedCallback" and CsFullTypeName(parameter.ParameterType) == "UnityEngine.ApplicationMemoryUsageChange" then
+        return false
+    end
+    if parameter.ParameterType.IsByRef then
+        return true
+    end
+end
+
 function GetCasterStatement(t, idx, var_name, need_declare, is_v_params)
     local testname = getSafeFullName(t)
 	local statement = ""

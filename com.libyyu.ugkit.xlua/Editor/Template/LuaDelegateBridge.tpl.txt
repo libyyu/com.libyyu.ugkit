@@ -28,6 +28,8 @@ namespace XLua
 		local has_return = (delegate.ReturnType.FullName ~= "System.Void")
 		local return_type_name = has_return and CsFullTypeName(delegate.ReturnType) or "void"
 		local out_idx = has_return and 2 or 1
+		local delegate_type_name = CsFullTypeName(delegate.DeclaringType)
+		--print("delegate_type_name", delegate_type_name)
 		if has_return then out_num = out_num + 1 end
 		%>
 		public <%=return_type_name%> __Gen_Delegate_Imp<%=group_idx%>(<%ForEachCsList(parameters, function(parameter, pi) 
@@ -36,7 +38,9 @@ namespace XLua
 			end
 			if parameter.IsOut and parameter.ParameterType.IsByRef then 
 				%>out <%
-			elseif parameter.ParameterType.IsByRef then
+			elseif IsParameterIn(delegate_type_name, parameter) then
+				%>in <%
+			elseif IsParameterRef(delegate_type_name, parameter) then
 				%>ref <%
 			end 
 			%><%=CsFullTypeName(parameter.ParameterType)%> p<%=pi%><% 
@@ -61,7 +65,7 @@ namespace XLua
                 PCall(L, <%=has_v_params and ((in_num - 1) .. " + (p".. (param_count - 1) .. " == null ? 0 : p" .. (param_count - 1) .. ".Length)" ) or in_num%>, <%=out_num%>, errFunc);
                 
                 <%ForEachCsList(parameters, function(parameter, pi) 
-                    if parameter.IsOut or parameter.ParameterType.IsByRef then 
+                    if parameter.IsOut or IsParameterRef(delegate_type_name, parameter) then 
                         %><%=GetCasterStatement(parameter.ParameterType, "errFunc" .. (" + "..out_idx), 'p' .. pi)%>;
                 <%
                     out_idx = out_idx + 1
