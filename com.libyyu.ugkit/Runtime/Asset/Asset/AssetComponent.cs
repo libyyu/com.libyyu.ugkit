@@ -91,6 +91,8 @@ namespace UGKit.Asset.Runtime
             await UniTask.CompletedTask;
         }
 
+        public bool Initialized { get { return _assetManager != null && _assetManager.Initialized; } }
+
         /// <summary>
         /// 初始化资源包
         /// </summary>
@@ -609,6 +611,24 @@ namespace UGKit.Asset.Runtime
         public ResourcePackage GetDefaultAssetsPackage()
         {             
             return _assetManager.GetDefaultAssetsPackage();
+        }
+
+        public List<string> GetPackageBundleList()
+        {
+            return _assetManager.GetPackageBundleList();
+        }
+        public List<string> GetPackageAssetList()
+        {
+            return _assetManager.GetPackageAssetList();
+        }
+
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string tag, int downloadingMaxNumber, int failedTryAgain)
+        {
+            return _assetManager.CreateTagResourceDownloader(tag, downloadingMaxNumber, failedTryAgain);
+        }
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string[] tags, int downloadingMaxNumber, int failedTryAgain)
+        {
+            return _assetManager.CreateTagResourceDownloader(tags, downloadingMaxNumber, failedTryAgain);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UGKit.Runtime;
 using UnityEngine.SceneManagement;
@@ -736,6 +737,28 @@ namespace UGKit.Asset.Runtime
         public ResourcePackage GetDefaultAssetsPackage()
         {
             return DefaultResourcePackage;
+        }
+
+        public List<string> GetPackageBundleList()
+        {
+            if (DefaultResourcePackage == null) throw new Exception("DefaultResourcePackage not init");
+            return DefaultResourcePackage.GetPackageBundleList();
+        }
+        public List<string> GetPackageAssetList()
+        {
+            if (DefaultResourcePackage == null) throw new Exception("DefaultResourcePackage not init");
+            return DefaultResourcePackage.GetPackageAssetList();
+        }
+
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string tag, int downloadingMaxNumber, int failedTryAgain)
+        {
+            if (DefaultResourcePackage == null) throw new Exception("DefaultResourcePackage not init");
+            return DefaultResourcePackage.CreateResourceDownloader(tag, downloadingMaxNumber, failedTryAgain);
+        }
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string[] tags, int downloadingMaxNumber, int failedTryAgain)
+        {
+            if (DefaultResourcePackage == null) throw new Exception("DefaultResourcePackage not init");
+            return DefaultResourcePackage.CreateResourceDownloader(tags, downloadingMaxNumber, failedTryAgain);
         }
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using YooAsset;
@@ -485,6 +486,11 @@ namespace UGKit.Asset.Runtime
 
         ResourcePackage GetDefaultAssetsPackage();
 
+        public List<string> GetPackageBundleList();
+        public List<string> GetPackageAssetList();
+
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string tag, int downloadingMaxNumber, int failedTryAgain);
+        public ResourceDownloaderOperation CreateTagResourceDownloader(string[] tags, int downloadingMaxNumber, int failedTryAgain);
         /// <summary>
         /// 清理无用资源
         /// </summary>

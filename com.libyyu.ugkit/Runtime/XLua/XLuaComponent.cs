@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using Cysharp.Threading.Tasks;
+
 
 
 
@@ -93,6 +95,63 @@ namespace UGKit.XLua.Runtime
                 });
             }
         }
+
+        public async UniTask<bool> InitLuaPackage()
+        {
+            if(GameApp.Asset == null || GameApp.Asset.Initialized == false)
+            {
+                return false;
+            }
+
+            bool bFiniResult = true;
+            var defaultPackage = GameApp.Asset.GetDefaultAssetsPackage();
+            for (int i = m_LuaPackageList.Count - 1; i >= 0; --i)
+            {
+                try
+                {
+                    var lowerPrefix = m_LuaPackageList[i].Prefix.ToLower();
+                    var package = GameApp.Asset.GetAssetsPackage(m_LuaPackageList[i].PackageName);
+                    GameApp.Asset.SetDefaultAssetsPackage(package);
+
+                    string assetName = null;
+                    var assetList = GameApp.Asset.GetPackageAssetList();
+                    foreach (var asset in assetList)
+                    {
+                        if(asset.StartsWith(lowerPrefix, StringComparison.CurrentCultureIgnoreCase) && asset.EndsWith(".lua", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            assetName = asset;
+                            break;
+                        }
+                    }
+
+                    if (assetName != null)
+                    {
+                        var path = Path.Combine(assetName);
+                        var text = await GameApp.Asset.LoadAssetAsync<TextAsset>(path);
+                        if (text == null)
+                        {
+                            bFiniResult = false;
+                            break;
+                        }
+                    }
+                }
+                finally
+                {
+                    if (defaultPackage != null)
+                    {
+                        GameApp.Asset.SetDefaultAssetsPackage(defaultPackage);
+                    }
+                }
+            }
+
+            if (defaultPackage != null)
+            {
+                GameApp.Asset.SetDefaultAssetsPackage(defaultPackage);
+            }
+
+            return bFiniResult;
+        }
+
 
         byte[] CustomLoader(ref string filepath)
         {
