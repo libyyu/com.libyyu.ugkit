@@ -41,7 +41,7 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Warning(GetTime() + info);
+                Logger.Warning(info);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Error(GetTime() + info);
+                Logger.Error(info);
             }
             else
             {
