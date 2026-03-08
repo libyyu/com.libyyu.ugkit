@@ -14,9 +14,9 @@ namespace UGKit.UI.Runtime
         /// <typeparam name="T">UI的具体类型。</typeparam>
         /// <param name="userData">传递给UI的用户数据。</param>
         /// <returns>返回打开的UI实例。</returns>
-        public async Task<T> OpenFullScreenAsync<T>(string uiFormAssetPath, object userData = null) where T : class, IUIForm
+        public async Task<T> OpenFullScreenAsync<T>(string uiFormAssetPath, UIType uiType, object userData = null) where T : class, IUIForm
         {
-            return await OpenUIFormAsync<T>(uiFormAssetPath, true, userData, true);
+            return await OpenUIFormAsync<T>(uiFormAssetPath, true, uiType, userData, true);
         }
 
         /// <summary>
@@ -25,11 +25,11 @@ namespace UGKit.UI.Runtime
         /// <typeparam name="T">UI的具体类型。</typeparam>
         /// <param name="userData">传递给UI的用户数据。</param>
         /// <returns>返回打开的UI实例。</returns>
-        public async Task<T> OpenFullScreenAsync<T>(object userData = null) where T : class, IUIForm
+        public async Task<T> OpenFullScreenAsync<T>(UIType uiType, object userData = null) where T : class, IUIForm
         {
             var uiFormAssetName = typeof(T).Name;
             var uiFormAssetPath = Utility.Asset.Path.GetUIPath(uiFormAssetName);
-            return await OpenFullScreenAsync<T>(uiFormAssetPath, userData);
+            return await OpenFullScreenAsync<T>(uiFormAssetPath, uiType, userData);
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        public async Task<IUIForm> OpenUIAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, object userData = null, bool isFullScreen = false)
+        public async Task<IUIForm> OpenUIAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, UIType uiType, object userData = null, bool isFullScreen = false)
         {
-            return await m_UIManager.OpenUIFormAsync(uiFormAssetPath, uiFormType, pauseCoveredUIForm, userData, isFullScreen);
+            return await m_UIManager.OpenUIFormAsync(uiFormAssetPath, uiFormType, pauseCoveredUIForm, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        private async Task<T> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, object userData = null, bool isFullScreen = false) where T : class, IUIForm
+        private async Task<T> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, UIType uiType, object userData = null, bool isFullScreen = false) where T : class, IUIForm
         {
-            var ui = await m_UIManager.OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, userData, isFullScreen);
+            var ui = await m_UIManager.OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, uiType, userData, isFullScreen);
             return ui as T;
         }
 
@@ -67,11 +67,11 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        public async Task<T> OpenUIFormAsync<T>(bool pauseCoveredUIForm, object userData = null, bool isFullScreen = false) where T : class, IUIForm
+        public async Task<T> OpenUIFormAsync<T>(bool pauseCoveredUIForm, UIType uiType, object userData = null, bool isFullScreen = false) where T : class, IUIForm
         {
             var uiFormAssetName = typeof(T).Name;
             var uiFormAssetPath = Utility.Asset.Path.GetUIPath(uiFormAssetName);
-            return await OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, userData, isFullScreen);
+            return await OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        public async Task<T> OpenAsync<T>(string uiFormAssetPath, object userData = null, bool isFullScreen = false) where T : class, IUIForm
+        public async Task<T> OpenAsync<T>(string uiFormAssetPath, UIType uiType, object userData = null, bool isFullScreen = false) where T : class, IUIForm
         {
-            return await OpenUIFormAsync<T>(uiFormAssetPath, false, userData, isFullScreen);
+            return await OpenUIFormAsync<T>(uiFormAssetPath, false, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        public async Task<T> OpenAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, object userData = null, bool isFullScreen = false) where T : class, IUIForm
+        public async Task<T> OpenAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, UIType uiType, object userData = null, bool isFullScreen = false) where T : class, IUIForm
         {
-            return await OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, userData, isFullScreen);
+            return await OpenUIFormAsync<T>(uiFormAssetPath, pauseCoveredUIForm, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace UGKit.UI.Runtime
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
-        public async Task<T> OpenAsync<T>(object userData = null, bool isFullScreen = false) where T : class, IUIForm
+        public async Task<T> OpenAsync<T>(UIType uiType, object userData = null, bool isFullScreen = false) where T : class, IUIForm
         {
             var uiFormAssetName = typeof(T).Name;
 
@@ -123,7 +123,7 @@ namespace UGKit.UI.Runtime
                 }
             }
 
-            return await OpenAsync<T>(uiFormAssetPath, userData, isFullScreen);
+            return await OpenAsync<T>(uiFormAssetPath, uiType, userData, isFullScreen);
         }
     }
 }

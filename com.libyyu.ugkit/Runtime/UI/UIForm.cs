@@ -31,6 +31,7 @@ namespace UGKit.UI.Runtime
         [SerializeField] private string m_ShowAnimationName;
         [SerializeField] private bool m_EnableHideAnimation;
         [SerializeField] private string m_HideAnimationName;
+        [SerializeField] private UIType m_UIType;
         private IUIGroup m_UIGroup;
         private UIEventSubscriber m_EventSubscriber = null;
         private object m_UserData = null;
@@ -60,6 +61,8 @@ namespace UGKit.UI.Runtime
         /// 获取界面是否已被销毁。
         /// </summary>
         protected bool IsDisposed { get; set; }
+
+        public UIType UIFromType { get { return m_UIType; } }
 
         /// <summary>
         /// 界面回收开始时间
@@ -343,7 +346,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="recycleInterval"></param>
-        public void Init(int serialId, string uiFormAssetName, IUIGroup uiGroup, Action<IUIForm> onInitAction, bool pauseCoveredUIForm, bool isNewInstance, object userData, int recycleInterval, bool isFullScreen = false)
+        public void Init(int serialId, string uiFormAssetName, IUIGroup uiGroup, Action<IUIForm> onInitAction, bool pauseCoveredUIForm, bool isNewInstance, object userData, int recycleInterval, UIType uiType, bool isFullScreen = false)
         {
             RecycleInterval = recycleInterval;
             ReleaseStartTime = DateTime.MaxValue;
@@ -360,6 +363,7 @@ namespace UGKit.UI.Runtime
                 return;
             }
 
+            m_UIType = uiType;
             m_UIFormAssetName = uiFormAssetName;
             m_FullName = GetType().FullName;
             m_DepthInUIGroup = 0;

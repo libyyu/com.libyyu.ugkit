@@ -15,6 +15,7 @@ namespace UGKit.UI.Runtime
         private Type m_FormType;
         private object m_AssetHandle;
         private bool m_IsFullScreen = false;
+        private UIType m_UIType;
 
         /// <summary>
         /// 获取界面是否全屏。
@@ -30,6 +31,11 @@ namespace UGKit.UI.Runtime
         public Type FormType
         {
             get { return m_FormType; }
+        }
+
+        public UIType uiType
+        {
+            get { return m_UIType; }
         }
 
         /// <summary>
@@ -82,7 +88,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">界面是否全屏。</param>
         /// <returns>创建的打开界面的信息。</returns>
-        public static OpenUIFormInfo Create(int serialId, Type uiFormType, bool pauseCoveredUIForm, object userData, bool isFullScreen)
+        public static OpenUIFormInfo Create(int serialId, Type uiFormType, bool pauseCoveredUIForm, object userData, bool isFullScreen, UIType uiType)
         {
             OpenUIFormInfo openUIFormInfo = ReferencePool.Acquire<OpenUIFormInfo>();
             openUIFormInfo.m_SerialId = serialId;
@@ -90,6 +96,7 @@ namespace UGKit.UI.Runtime
             openUIFormInfo.m_UserData = userData;
             openUIFormInfo.m_FormType = uiFormType;
             openUIFormInfo.m_IsFullScreen = isFullScreen;
+            openUIFormInfo.m_UIType = uiType;
             return openUIFormInfo;
         }
 

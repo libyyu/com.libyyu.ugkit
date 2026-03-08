@@ -3,11 +3,19 @@ using System;
 
 namespace UGKit.UI.Runtime
 {
+    public enum UIType
+    {
+        UGUI,
+        FairyGUI,
+    }
+
     /// <summary>
     /// 界面接口。
     /// </summary>
     public interface IUIForm
     {
+        UIType UIFromType { get; }
+
         /// <summary>
         /// 界面回收开始时间
         /// </summary>
@@ -130,7 +138,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <param name="recycleInterval">界面回收间隔，单位：秒</param>
-        void Init(int serialId, string uiFormAssetName, IUIGroup uiGroup, Action<IUIForm> onInitAction, bool pauseCoveredUIForm, bool isNewInstance, object userData, int recycleInterval, bool isFullScreen = false);
+        void Init(int serialId, string uiFormAssetName, IUIGroup uiGroup, Action<IUIForm> onInitAction, bool pauseCoveredUIForm, bool isNewInstance, object userData, int recycleInterval, UIType uiType, bool isFullScreen = false);
 
         /// <summary>
         /// 界面初始化。

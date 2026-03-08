@@ -66,11 +66,13 @@ namespace UGKit.UI.Runtime
                 return false;
             }
 
-#if ENABLE_UI_FAIRYGUI
-            UIGroupHelperBase uiGroupHelper = (UIGroupHelperBase)m_CustomUIGroupHelper.Handler(m_InstanceFairyGUIRoot, uiGroupName, m_UIGroupHelperTypeName, m_CustomUIGroupHelper);
-#else
-            UIGroupHelperBase uiGroupHelper = (UIGroupHelperBase)m_CustomUIGroupHelper.Handler(m_InstanceUGUIRoot, uiGroupName, m_UIGroupHelperTypeName, m_CustomUIGroupHelper);
-#endif
+//#if ENABLE_UI_FAIRYGUI
+//            UIGroupHelperBase uiGroupHelper = (UIGroupHelperBase)m_CustomUIGroupHelper.Handler(m_InstanceFairyGUIRoot, uiGroupName, m_UIGroupHelperTypeName, m_CustomUIGroupHelper);
+//#endif
+
+            UIGroupHelperBase uiGroupHelper = (UIGroupHelperBase)m_CustomUIGroupHelper.Handler(GetUIRoot(UIType.UGUI), uiGroupName, m_UIGroupHelperTypeName, m_CustomUIGroupHelper);
+
+
             if (uiGroupHelper == null)
             {
                 Log.Error("Can not create UI group helper.");

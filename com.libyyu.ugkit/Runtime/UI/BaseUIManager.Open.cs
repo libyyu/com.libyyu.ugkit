@@ -62,9 +62,9 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <returns>界面的实例。</returns>
-        public Task<IUIForm> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, object userData, bool isFullScreen = false) where T : class, IUIForm
+        public Task<IUIForm> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, UIType uiType, object userData, bool isFullScreen = false) where T : class, IUIForm
         {
-            return InnerOpenUIFormAsync(uiFormAssetPath, typeof(T), pauseCoveredUIForm, userData, isFullScreen);
+            return InnerOpenUIFormAsync(uiFormAssetPath, typeof(T), pauseCoveredUIForm, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <returns>界面的实例。</returns>
-        public async Task<IUIForm> OpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, object userData, bool isFullScreen = false)
+        public Task<IUIForm> OpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, UIType uiType, object userData, bool isFullScreen = false)
         {
-            return await InnerOpenUIFormAsync(uiFormAssetPath, uiFormType, pauseCoveredUIForm, userData, isFullScreen);
+            return InnerOpenUIFormAsync(uiFormAssetPath, uiFormType, pauseCoveredUIForm, uiType, userData, isFullScreen);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <returns>界面的实例。</returns>
-        protected abstract Task<IUIForm> InnerOpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, object userData, bool isFullScreen = false);
+        protected abstract Task<IUIForm> InnerOpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, UIType uiType, object userData, bool isFullScreen = false);
 
         /// <summary>
         /// 激活界面。

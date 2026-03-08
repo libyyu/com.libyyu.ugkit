@@ -24,7 +24,7 @@ namespace UGKit.UI.Runtime
         /// <param name="uiFormType">界面逻辑类型</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面。</returns>
-        public abstract IUIForm CreateUIForm(object uiFormInstance, Type uiFormType, object userData);
+        public abstract IUIForm CreateUIForm(object uiFormInstance, Type uiFormType, UIType uiType, object userData);
 
         /// <summary>
         /// 释放界面。

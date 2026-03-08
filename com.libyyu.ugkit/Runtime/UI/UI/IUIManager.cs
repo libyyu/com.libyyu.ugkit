@@ -234,7 +234,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <returns>界面的序列编号。</returns>
-        Task<IUIForm> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, object userData, bool isFullScreen = false) where T : class, IUIForm;
+        Task<IUIForm> OpenUIFormAsync<T>(string uiFormAssetPath, bool pauseCoveredUIForm, UIType uiType, object userData, bool isFullScreen = false) where T : class, IUIForm;
 
         /// <summary>
         /// 打开界面。
@@ -245,7 +245,7 @@ namespace UGKit.UI.Runtime
         /// <param name="userData">用户自定义数据。</param>
         /// <param name="isFullScreen">是否全屏</param>
         /// <returns>界面的序列编号。</returns>
-        Task<IUIForm> OpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, object userData, bool isFullScreen = false);
+        Task<IUIForm> OpenUIFormAsync(string uiFormAssetPath, Type uiFormType, bool pauseCoveredUIForm, UIType uiType, object userData, bool isFullScreen = false);
 
         /// <summary>
         /// 关闭界面。

@@ -200,5 +200,28 @@ namespace UGKit.UI.Runtime
         {
             m_UIFormHideHandler = handler;
         }
+
+        /// <summary>
+        /// 解析區分 Resources 或 Bundle 加載名稱規則
+        /// </summary>
+        /// <param name="assetName"></param>
+        /// <returns></returns>
+        public static bool RefineResourcesPath(ref string assetName)
+        {
+            if (string.IsNullOrEmpty(assetName))
+                return false;
+
+            string prefix = "res#";
+            if (assetName.Length > prefix.Length)
+            {
+                if (assetName.Substring(0, prefix.Length).Equals(prefix))
+                {
+                    var count = assetName.Length - prefix.Length;
+                    assetName = assetName.Substring(prefix.Length, count);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

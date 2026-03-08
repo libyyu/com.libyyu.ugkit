@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UGKit.Asset.Runtime;
 using UGKit.Event.Runtime;
 using UGKit.ObjectPool;
@@ -50,11 +51,9 @@ namespace UGKit.UI.Runtime
         [SerializeField] private Transform m_InstanceFairyGUIRoot = null;
 
         [SerializeField] private string m_UIFormHelperTypeName = "UGKit.UI.FairyGUI.Runtime.FairyGUIFormHelper";
-
         [SerializeField] private UIFormHelperBase m_CustomUIFormHelper = null;
 
         [SerializeField] private string m_UIGroupHelperTypeName = "UGKit.UI.FairyGUI.Runtime.FairyGUIUIGroupHelper";
-
         [SerializeField] private UIGroupHelperBase m_CustomUIGroupHelper = null;
 
         [SerializeField] private UIGroup[] m_UIGroups = new UIGroup[]
@@ -66,7 +65,6 @@ namespace UGKit.UI.Runtime
             new UIGroup(UIGroupConstants.Battle.Depth, UIGroupConstants.Battle.Name),
             new UIGroup(UIGroupConstants.Hud.Depth, UIGroupConstants.Hud.Name),
             new UIGroup(UIGroupConstants.Map.Depth, UIGroupConstants.Map.Name),
-            new UIGroup(UIGroupConstants.Hidden.Depth, UIGroupConstants.Hidden.Name),
             new UIGroup(UIGroupConstants.Floor.Depth, UIGroupConstants.Floor.Name),
             new UIGroup(UIGroupConstants.Normal.Depth, UIGroupConstants.Normal.Name),
             new UIGroup(UIGroupConstants.Fixed.Depth, UIGroupConstants.Fixed.Name),
@@ -150,45 +148,29 @@ namespace UGKit.UI.Runtime
             set { m_UIManager.InstancePriority = m_InstancePriority = value; }
         }*/
 
-        /// <summary>
-        /// 游戏框架组件初始化。
-        /// </summary>
-        protected override void OnPreCreate()
+        public Transform GetUIRoot(UIType uiType)
+        {
+            if (uiType == UIType.UGUI) return m_InstanceUGUIRoot;
+            return null;
+        }
+
+        void InitUGUIRoot()
         {
             ImplementationComponentType = Utility.Assembly.GetType(componentType);
             InterfaceComponentType = typeof(IUIManager);
-            base.OnPreCreate();
+            GameEntry.RegisterComponent(this);
+            if (IsAutoRegister)
+            {
+                GameFrameworkGuard.NotNull(ImplementationComponentType, nameof(ImplementationComponentType));
+                GameFrameworkGuard.NotNull(InterfaceComponentType, nameof(InterfaceComponentType));
+                GameFrameworkEntry.RegisterModule(InterfaceComponentType, ImplementationComponentType);
+            }
+
             var namespaceName = ImplementationComponentType.Namespace;
-
-#if ENABLE_UI_FAIRYGUI
-            if (!namespaceName.StartsWithFast("UGKit.UI.FairyGUI.Runtime"))
-            {
-                Debug.LogError("UI组件的 ComponentType 设置错误。请设置和 UI 系统一致的组件.");
-                return;
-            }
-
-            if (m_InstanceFairyGUIRoot == null)
-            {
-                Debug.LogError("UI组件的 FAIRY GUI Root 设置错误。请设置");
-                return;
-            }
-
-            m_InstanceFairyGUIRoot.gameObject.SetActive(true);
-            if (m_InstanceUGUIRoot != null)
-            {
-                m_InstanceUGUIRoot.gameObject.SetActive(false);
-            }
-
-#else
             if (!namespaceName.StartsWithFast("UGKit.UI.UGUI.Runtime"))
             {
                 Debug.LogError("UI组件的 ComponentType 设置错误。请设置和 UI 系统一致的组件.");
                 return;
-            }
-
-            if (m_InstanceFairyGUIRoot != null)
-            {
-                m_InstanceFairyGUIRoot.gameObject.SetActive(false);
             }
 
             if (m_InstanceUGUIRoot == null)
@@ -198,7 +180,7 @@ namespace UGKit.UI.Runtime
             }
 
             m_InstanceUGUIRoot.gameObject.SetActive(true);
-#endif
+
             if (!m_UIFormHelperTypeName.StartsWithFast(namespaceName))
             {
                 Debug.LogError("UI组件的 UI Form Helper 设置错误。请设置和 ComponentType 类型 一致.");
@@ -241,8 +223,48 @@ namespace UGKit.UI.Runtime
             }
         }
 
-        private void Start()
+        /// <summary>
+        /// 游戏框架组件初始化。
+        /// </summary>
+        protected override void OnPreCreate()
         {
+            if (m_InstanceFairyGUIRoot != null)
+            {
+                m_InstanceFairyGUIRoot.gameObject.SetActive(false);
+            }
+            if (m_InstanceUGUIRoot != null)
+            {
+                m_InstanceUGUIRoot.gameObject.SetActive(false);
+            }
+
+            //UGUI
+            InitUGUIRoot();
+
+#if ENABLE_UI_FAIRYGUI
+            if (!namespaceName.StartsWithFast("UGKit.UI.FairyGUI.Runtime"))
+            {
+                Debug.LogError("UI组件的 ComponentType 设置错误。请设置和 UI 系统一致的组件.");
+                return;
+            }
+
+            if (m_InstanceFairyGUIRoot == null)
+            {
+                Debug.LogError("UI组件的 FAIRY GUI Root 设置错误。请设置");
+                return;
+            }
+
+            m_InstanceFairyGUIRoot.gameObject.SetActive(true);
+            if (m_InstanceUGUIRoot != null)
+            {
+                m_InstanceUGUIRoot.gameObject.SetActive(false);
+            }
+
+#endif
+        }
+
+        protected override async UniTask OnCreate()
+        {
+            await UniTask.CompletedTask;
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
             if (baseComponent == null)
             {
@@ -293,7 +315,7 @@ namespace UGKit.UI.Runtime
             transform.localScale = Vector3.one;
 
             m_UIManager.SetUIFormHelper(uiFormHelper);
-#if ENABLE_UI_UGUI
+
             if (m_InstanceUGUIRoot == null)
             {
                 m_InstanceUGUIRoot = new GameObject("UI Form Instances").transform;
@@ -302,7 +324,7 @@ namespace UGKit.UI.Runtime
             }
 
             m_InstanceUGUIRoot.gameObject.layer = LayerMask.NameToLayer("UI");
-#endif
+
             for (int i = 0; i < m_UIGroups.Length; i++)
             {
                 if (!AddUIGroup(m_UIGroups[i].Name, m_UIGroups[i].Depth))
