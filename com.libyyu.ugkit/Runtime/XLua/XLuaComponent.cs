@@ -201,10 +201,11 @@ namespace UGKit.XLua.Runtime
             {
                 try
                 {
+                    filepath = filepath.Replace(".", "/");
                     var loader = m_LuaPackageList[i];
                     var package = GameApp.Asset.GetAssetsPackage(loader.PackageName);
                     GameApp.Asset.SetDefaultAssetsPackage(package);
-                    var assetName = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua").Replace("\\", "/");
+                    var assetName = Path.Combine(loader.Prefix, $"{filepath}.lua").Replace("\\", "/");
                     var path = assetName.ToLower();
                     Dictionary<string, bool> assetDict = null;
                     if(m_LuaAssetDict.TryGetValue(loader, out assetDict) && assetDict != null && assetDict.ContainsKey(path) && assetDict[path] == true)
@@ -213,6 +214,7 @@ namespace UGKit.XLua.Runtime
                         var handle = GameApp.Asset.LoadAssetSync<TextAsset>(assetName);
                         if (null != handle)
                         {
+                            filepath = Path.Combine(Application.dataPath, assetName);
                             var textAsset = handle.AssetObject as TextAsset;
                             return textAsset.bytes;
                         }
