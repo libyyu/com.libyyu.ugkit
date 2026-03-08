@@ -201,10 +201,11 @@ namespace UGKit.XLua.Runtime
                     var loader = m_LuaPackageList[i];
                     var package = GameApp.Asset.GetAssetsPackage(loader.PackageName);
                     GameApp.Asset.SetDefaultAssetsPackage(package);
-                    var path = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua").Replace("\\", "/").ToLower();
+                    var assetName = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua").Replace("\\", "/");
+                    var path = assetName.ToLower();
                     if(loader.assetDict != null && loader.assetDict.ContainsKey(path) && loader.assetDict[path] == true)
                     {
-                        var handle = GameApp.Asset.LoadAssetSync<TextAsset>(path);
+                        var handle = GameApp.Asset.LoadAssetSync<TextAsset>(assetName);
                         if (null != handle)
                         {
                             var textAsset = handle.AssetObject as TextAsset;
