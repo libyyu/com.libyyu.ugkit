@@ -29,9 +29,6 @@ namespace UGKit.XLua.Runtime
             public string PackageName;
             public string Prefix;
 
-            [HideInInspector]
-            public Dictionary<string, bool> assetDict;
-
             // 实现 IEquatable<Point>
             public bool Equals(LuaLoader other)
             {
@@ -69,6 +66,8 @@ namespace UGKit.XLua.Runtime
         }
 
         [SerializeField] public List<LuaLoader> m_LuaPackageList = new List<LuaLoader>();
+
+        private Dictionary<LuaLoader, Dictionary<string, bool>> m_LuaAssetDict = new Dictionary<LuaLoader, Dictionary<string, bool>>();
 
         protected override void OnPreCreate()
         {
@@ -113,7 +112,6 @@ namespace UGKit.XLua.Runtime
                     {
                         PackageName = loader.PackageName,
                         Prefix = prefix,
-                        assetDict = new Dictionary<string, bool>()
                     });
                 }
             }
@@ -128,7 +126,6 @@ namespace UGKit.XLua.Runtime
                 {
                     PackageName = defaultPackage.PackageName,
                     Prefix = "Assets/LuaScript",
-                    assetDict = new Dictionary<string, bool>()
                 });
             }
 #endif
@@ -158,9 +155,13 @@ namespace UGKit.XLua.Runtime
                     {
                         if(asset.StartsWith(lowerPrefix, StringComparison.CurrentCultureIgnoreCase) && asset.EndsWith(".lua", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            loader.assetDict.TryAdd(asset.ToLower(), true);
-                            assetName = asset;
+                            if(!m_LuaAssetDict.ContainsKey(loader))
+                            {
+                                m_LuaAssetDict[loader] = new Dictionary<string, bool>();
+                            }
+                            m_LuaAssetDict[loader].TryAdd(asset.ToLower(), true);
                             Log.Info($"Init Lua AssetDict {asset.ToLower()} in {loader.PackageName}");
+                            assetName = asset;
                         }
                     }
 
@@ -205,7 +206,8 @@ namespace UGKit.XLua.Runtime
                     GameApp.Asset.SetDefaultAssetsPackage(package);
                     var assetName = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua").Replace("\\", "/");
                     var path = assetName.ToLower();
-                    if(loader.assetDict != null && loader.assetDict.ContainsKey(path) && loader.assetDict[path] == true)
+                    Dictionary<string, bool> assetDict = null;
+                    if(m_LuaAssetDict.TryGetValue(loader, out assetDict) && assetDict != null && assetDict.ContainsKey(path) && assetDict[path] == true)
                     {
                         Log.Debug($"CustomLoader: {assetName}");
                         var handle = GameApp.Asset.LoadAssetSync<TextAsset>(assetName);
