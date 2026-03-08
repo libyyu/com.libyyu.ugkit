@@ -147,8 +147,9 @@ namespace UGKit.XLua.Runtime
             {
                 try
                 {
-                    var lowerPrefix = m_LuaPackageList[i].Prefix.ToLower();
-                    var package = GameApp.Asset.GetAssetsPackage(m_LuaPackageList[i].PackageName);
+                    var loader = m_LuaPackageList[i];
+                    var lowerPrefix = loader.Prefix.ToLower();
+                    var package = GameApp.Asset.GetAssetsPackage(loader.PackageName);
                     GameApp.Asset.SetDefaultAssetsPackage(package);
 
                     string assetName = null;
@@ -157,8 +158,9 @@ namespace UGKit.XLua.Runtime
                     {
                         if(asset.StartsWith(lowerPrefix, StringComparison.CurrentCultureIgnoreCase) && asset.EndsWith(".lua", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            m_LuaPackageList[i].assetDict.TryAdd(asset.ToLower(), true);
+                            loader.assetDict.TryAdd(asset.ToLower(), true);
                             assetName = asset;
+                            Log.Info($"Init Lua AssetDict {asset.ToLower()} in {loader.PackageName}");
                         }
                     }
 
@@ -211,6 +213,10 @@ namespace UGKit.XLua.Runtime
                         {
                             var textAsset = handle.AssetObject as TextAsset;
                             return textAsset.bytes;
+                        }
+                        else
+                        {
+                            Log.Warning($"lua script load failed. {assetName} in {loader.PackageName}");
                         }
                     }
                     else
