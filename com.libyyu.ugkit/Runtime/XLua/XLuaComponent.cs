@@ -205,12 +205,17 @@ namespace UGKit.XLua.Runtime
                     var path = assetName.ToLower();
                     if(loader.assetDict != null && loader.assetDict.ContainsKey(path) && loader.assetDict[path] == true)
                     {
+                        Log.Debug($"CustomLoader: {assetName}");
                         var handle = GameApp.Asset.LoadAssetSync<TextAsset>(assetName);
                         if (null != handle)
                         {
                             var textAsset = handle.AssetObject as TextAsset;
                             return textAsset.bytes;
                         }
+                    }
+                    else
+                    {
+                        Log.Info($"CustomLoader not found asset: {assetName} in {loader.PackageName}");
                     }
                 }
                 finally
