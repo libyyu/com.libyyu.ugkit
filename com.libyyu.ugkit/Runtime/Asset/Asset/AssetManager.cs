@@ -73,11 +73,11 @@ namespace UGKit.Asset.Runtime
             if (resourcePackage == null)
             {
                 resourcePackage = YooAssets.CreatePackage(packageName);
-                if (isDefaultPackage)
-                {
-                    // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
-                    SetDefaultAssetsPackage(resourcePackage);
-                }
+            }
+            if (isDefaultPackage)
+            {
+                // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
+                SetDefaultAssetsPackage(resourcePackage);
             }
 
             var initializationOperationHandler = CreateInitializationOperationHandler(resourcePackage, hostServerURL, fallbackHostServerURL);
