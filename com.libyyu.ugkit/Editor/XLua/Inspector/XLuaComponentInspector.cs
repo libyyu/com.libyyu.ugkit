@@ -28,9 +28,9 @@ namespace UGKit.XLua.Editor
 
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                GUI.enabled = false;
+                //GUI.enabled = false;
                 EditorGUILayout.PropertyField(m_LuaPackages, m_LuaPackagesGUIContent);
-                GUI.enabled = true;
+                //GUI.enabled = true;
             }
             EditorGUI.EndDisabledGroup();
 
