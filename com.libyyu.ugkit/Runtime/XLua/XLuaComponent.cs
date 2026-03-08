@@ -5,8 +5,6 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 
 
-
-
 #if ENABLE_UGKIT_TENCENT_XLUA
 using System;
 using XLua;
@@ -30,6 +28,9 @@ namespace UGKit.XLua.Runtime
         {
             public string PackageName;
             public string Prefix;
+
+            [HideInInspector]
+            public Dictionary<string, bool> assetDict;
 
             // 实现 IEquatable<Point>
             public bool Equals(LuaLoader other)
@@ -81,9 +82,44 @@ namespace UGKit.XLua.Runtime
                 return;
             }
 
+            StaticLuaCallbacks.lua_Print = new StaticLuaCallbacks.LuaPrintDelegate(s => Log.Info("[Lua]" + s));
+            StaticLuaCallbacks.lua_Warning = new StaticLuaCallbacks.LuaPrintDelegate(s => Log.Warning("[Lua]" + s));
+            StaticLuaCallbacks.lua_Error = new StaticLuaCallbacks.LuaPrintDelegate(s => Log.Error("[Lua]" + s));
+
             _luaManager.InitLuaEnv(new LuaEnv());
             _luaManager.AddLoader(CustomLoader);
             Log.Info("XLua In Runing");
+#if UNITY_EDITOR
+            //去重
+            Dictionary<string, bool> tempDict = new Dictionary<string, bool>();
+            List<LuaLoader> tempList = new List<LuaLoader>();
+            for (int i = 0; i < m_LuaPackageList.Count; i++)
+            {
+                var loader = m_LuaPackageList[i];
+                var prefix = loader.Prefix.Replace("\\", "/");
+                if (prefix.EndsWith("/"))
+                {
+                    prefix = prefix.Substring(0, prefix.Length - 1);
+                }
+                var key = (loader.PackageName + "|" + prefix).ToLower();
+                if(tempDict.ContainsKey(key))
+                {
+                    Log.Warning($"Duplicate Lua Package: {loader.PackageName} with Prefix: {loader.Prefix}");
+                }
+                else
+                {
+                    tempDict[key] = true;
+                    tempList.Add(new LuaLoader
+                    {
+                        PackageName = loader.PackageName,
+                        Prefix = prefix,
+                        assetDict = new Dictionary<string, bool>()
+                    });
+                }
+            }
+
+            m_LuaPackageList.Clear();
+            m_LuaPackageList.AddRange(tempList);
 
             if (m_LuaPackageList.Count == 0)
             {
@@ -91,9 +127,11 @@ namespace UGKit.XLua.Runtime
                 m_LuaPackageList.Insert(0, new LuaLoader
                 {
                     PackageName = defaultPackage.PackageName,
-                    Prefix = "Assets/LuaScript"
+                    Prefix = "Assets/LuaScript",
+                    assetDict = new Dictionary<string, bool>()
                 });
             }
+#endif
         }
 
         public async UniTask<bool> InitLuaPackage()
@@ -119,16 +157,16 @@ namespace UGKit.XLua.Runtime
                     {
                         if(asset.StartsWith(lowerPrefix, StringComparison.CurrentCultureIgnoreCase) && asset.EndsWith(".lua", StringComparison.CurrentCultureIgnoreCase))
                         {
+                            m_LuaPackageList[i].assetDict.TryAdd(asset.ToLower(), true);
                             assetName = asset;
-                            break;
                         }
                     }
 
                     if (assetName != null)
                     {
-                        var path = Path.Combine(assetName);
-                        var text = await GameApp.Asset.LoadAssetAsync<TextAsset>(path);
-                        if (text == null)
+                        Log.Info($"Init Lua Bundle by Asset: {assetName}");
+                        var asset = await GameApp.Asset.LoadAssetAsync<TextAsset>(assetName);
+                        if (asset == null || !asset.IsValid)
                         {
                             bFiniResult = false;
                             break;
@@ -160,14 +198,18 @@ namespace UGKit.XLua.Runtime
             {
                 try
                 {
-                    var package = GameApp.Asset.GetAssetsPackage(m_LuaPackageList[i].PackageName);
+                    var loader = m_LuaPackageList[i];
+                    var package = GameApp.Asset.GetAssetsPackage(loader.PackageName);
                     GameApp.Asset.SetDefaultAssetsPackage(package);
-                    var path = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua");
-                    var handle = GameApp.Asset.LoadAssetSync<TextAsset>(path);
-                    if (null != handle)
+                    var path = Path.Combine(m_LuaPackageList[i].Prefix, $"{filepath}.lua").Replace("\\", "/").ToLower();
+                    if(loader.assetDict != null && loader.assetDict.ContainsKey(path) && loader.assetDict[path] == true)
                     {
-                        var textAsset = handle.AssetObject as TextAsset;
-                        return textAsset.bytes;
+                        var handle = GameApp.Asset.LoadAssetSync<TextAsset>(path);
+                        if (null != handle)
+                        {
+                            var textAsset = handle.AssetObject as TextAsset;
+                            return textAsset.bytes;
+                        }
                     }
                 }
                 finally
