@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -526,5 +527,9 @@ namespace UGKit.Asset.Runtime
         /// <param name="assetPath">资源路径</param>
         [UnityEngine.Scripting.Preserve]
         void UnloadAsset(string packageName, string assetPath);
+
+
+        [UnityEngine.Scripting.Preserve]
+        UniTask<bool> DoesStreamingAssetsPackageExists(string packageName);
     }
 }
