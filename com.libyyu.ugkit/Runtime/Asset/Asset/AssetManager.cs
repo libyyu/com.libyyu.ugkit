@@ -1,3 +1,4 @@
+using Codice.CM.Common.Serialization.Replication;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
@@ -5,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using UGKit.Runtime;
+using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -13,6 +15,41 @@ using Object = UnityEngine.Object;
 
 namespace UGKit.Asset.Runtime
 {
+    /// <summary>
+    /// 包裹訊息
+    /// </summary>
+    [Serializable]
+    public class AppPackageInfo
+    {
+        /// <summary>
+        /// Package name
+        /// </summary>
+        public string packageName;
+
+        /// <summary>
+        /// Custom host server
+        /// </summary>
+        [HideInInspector]
+        public string hostServer = null;
+
+        /// <summary>
+        /// Custom fallback host server
+        /// </summary>
+        [HideInInspector]
+        public string fallbackHostServer = null;
+
+
+        public bool isDefault;
+
+
+        public bool initUpdate;
+
+        /// <summary>
+        /// [YooAsset] Initialize parameters for custom
+        /// </summary>
+        public InitializeParameters initializeParameters;
+    }
+
     /// <summary>
     /// 资源组件。
     /// </summary>
@@ -66,7 +103,7 @@ namespace UGKit.Asset.Runtime
         /// <param name="isDefaultPackage">是否是默认包</param>
         /// <returns></returns>
         [UnityEngine.Scripting.Preserve]
-        public Task<bool> InitPackageAsync(string packageName, string hostServerURL, string fallbackHostServerURL, bool isDefaultPackage = false)
+        public async Task<bool> InitPackageAsync(string packageName, string hostServerURL, string fallbackHostServerURL, bool isDefaultPackage = false, bool updatePackage = true)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
             GameFrameworkGuard.NotNull(packageName, nameof(packageName));
@@ -79,6 +116,16 @@ namespace UGKit.Asset.Runtime
             {
                 resourcePackage = YooAssets.CreatePackage(packageName);
             }
+
+            if (resourcePackage.InitializeStatus == EOperationStatus.Succeed)
+            {
+                // The default initialized state is true
+                bool isInitialized = true;
+                if (updatePackage) isInitialized = await UpdatePackage(packageName);
+                Log.Info($"Package: {packageName} is initialized. Status: {resourcePackage.InitializeStatus}.");
+                return isInitialized;
+            }
+
             if (isDefaultPackage)
             {
                 // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
@@ -86,18 +133,26 @@ namespace UGKit.Asset.Runtime
             }
 
             var initializationOperationHandler = CreateInitializationOperationHandler(resourcePackage, hostServerURL, fallbackHostServerURL);
-            initializationOperationHandler.Completed += asyncOperationBase =>
+            await initializationOperationHandler;
+
+            if (initializationOperationHandler.Status == EOperationStatus.Succeed)
             {
-                if (asyncOperationBase.Error == null && asyncOperationBase.Status == EOperationStatus.Succeed && asyncOperationBase.IsDone)
-                {
-                    taskCompletionSource.TrySetResult(true);
-                }
-                else
-                {
-                    taskCompletionSource.TrySetException(new Exception(asyncOperationBase.Error));
-                }
-            };
-            return taskCompletionSource.Task;
+                // The default initialized state is true
+                bool isInitialized = true;
+                if (updatePackage) isInitialized = await UpdatePackage(packageName);
+                Log.Info($"Package: {packageName} Init completed successfully.");
+                return isInitialized;
+            }
+            else
+            {
+                Log.Error($"Package: {packageName} initialization failed. {initializationOperationHandler.Error}");
+                return false;
+            }
+        }
+
+        public async UniTask<bool> UpdatePackage(string packageName)
+        {
+            return false;
         }
 
         /// <summary>
@@ -737,6 +792,7 @@ namespace UGKit.Asset.Runtime
         {
             YooAssets.SetDefaultPackage(resourcePackage);
             DefaultResourcePackage = resourcePackage;
+            Log.Info($"SetDefaultAssetsPackage {resourcePackage.PackageName}");
         }
 
         public ResourcePackage GetDefaultAssetsPackage()

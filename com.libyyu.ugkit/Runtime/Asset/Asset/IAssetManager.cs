@@ -102,7 +102,7 @@ namespace UGKit.Asset.Runtime
         /// <param name="isDefaultPackage">是否是默认包，默认是</param>
         /// <returns></returns>
         [UnityEngine.Scripting.Preserve]
-        Task<bool> InitPackageAsync(string packageName, string hostServerURL, string fallbackHostServerURL, bool isDefaultPackage = true);
+        Task<bool> InitPackageAsync(string packageName, string hostServerURL, string fallbackHostServerURL, bool isDefaultPackage = true, bool updatePackage = true);
 
         /// <summary>
         /// 卸载资源

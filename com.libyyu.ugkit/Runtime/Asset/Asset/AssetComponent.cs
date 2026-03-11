@@ -101,7 +101,7 @@ namespace UGKit.Asset.Runtime
         /// <param name="fallbackHostServer">备用下载地址</param>
         /// <param name="isDefaultPackage">是否是默认包</param>
         [UnityEngine.Scripting.Preserve]
-        public async Task<bool> InitPackageAsync(string packageName, string host, string fallbackHostServer, bool isDefaultPackage = false)
+        public async Task<bool> InitPackageAsync(string packageName, string host, string fallbackHostServer, bool isDefaultPackage = false, bool updatePackage = true)
         {
 #if UNITY_EDITOR
             var assetResourcePackageInfo = new AssetResourcePackageInfo()
@@ -116,6 +116,26 @@ namespace UGKit.Asset.Runtime
             }
 #endif
             return await _assetManager.InitPackageAsync(packageName, host, fallbackHostServer, isDefaultPackage);
+        }
+
+        [UnityEngine.Scripting.Preserve]
+        public async Task<bool> InitPackageAsync(List<AppPackageInfo> presetAppPackageInfos)
+        {
+            foreach (var packageInfo in presetAppPackageInfos)
+            {
+                // updatePackage = true, 因為新版 Yoo 必須獲取版號與 manifest 才能進行資源加載
+                bool isInitialized = await InitPackageAsync(packageInfo.packageName, packageInfo.hostServer, packageInfo.fallbackHostServer, packageInfo.isDefault, packageInfo.initUpdate);
+                if (isInitialized)
+                {
+                    Log.Info($"Successfully initialized preset App package: {packageInfo.packageName}.");
+                }
+                else
+                {
+                    Log.Error($"Initialization failed for preset App package: {packageInfo.packageName}.");
+                    return false;
+                }
+            }
+            return true;
         }
 
         #region 异步加载子资源对象
