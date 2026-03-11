@@ -56,7 +56,6 @@ namespace UGKit.Asset.Runtime
 #endif
 
         public const string BuildInPackageName = "DefaultPackage";
-        private InitializationOperation _initializationOperation;
 
         private IAssetManager _assetManager;
 
